@@ -5,6 +5,9 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 interface DropboxFile {
   '.tag': string;
   name: string;
