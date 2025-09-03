@@ -131,7 +131,7 @@ function DashboardContent() {
     setLoading(true);
     try {
       console.log('Loading files from path:', path);
-      const response = await fetch(`http://localhost:3001/api/dropbox/files?token=${token}&path=${encodeURIComponent(path)}`);
+      const response = await fetch(`https://roadie-music-collab-fm2gtpbv1-guillaumeracines-projects.vercel.app/api/dropbox/files?token=${token}&path=${encodeURIComponent(path)}`);
       const data = await response.json();
       
       if (!response.ok) {
@@ -149,7 +149,7 @@ function DashboardContent() {
         if (data.error?.includes('path/not_found') || data.error?.includes('Folder not found')) {
           // If folder not found, try loading from root
           console.log('Folder not found, loading from root');
-          const rootResponse = await fetch(`http://localhost:3001/api/dropbox/files?token=${token}&path=`);
+          const rootResponse = await fetch(`https://roadie-music-collab-fm2gtpbv1-guillaumeracines-projects.vercel.app/api/dropbox/files?token=${token}&path=`);
           const rootData = await rootResponse.json();
           if (rootData.files) {
             setFiles(rootData.files);
@@ -215,7 +215,7 @@ function DashboardContent() {
       formData.append('path', uploadPath);
       formData.append('token', accessToken);
 
-      const response = await fetch(`http://localhost:3001/api/dropbox/files`, {
+      const response = await fetch(`https://roadie-music-collab-fm2gtpbv1-guillaumeracines-projects.vercel.app/api/dropbox/files`, {
         method: 'POST',
         body: formData,
       });
@@ -271,7 +271,7 @@ function DashboardContent() {
       formData.append('token', accessToken);
       formData.append('action', action);
 
-      const response = await fetch(`http://localhost:3001/api/dropbox/organize`, {
+      const response = await fetch(`https://roadie-music-collab-fm2gtpbv1-guillaumeracines-projects.vercel.app/api/dropbox/organize`, {
         method: 'POST',
         body: formData,
       });
@@ -332,7 +332,7 @@ function DashboardContent() {
       
       if (!isText && !isAudio) return;
 
-      const downloadUrl = `http://localhost:3001/api/dropbox/download?token=${accessToken}&path=${encodeURIComponent(file.path_display)}`;
+      const downloadUrl = `https://roadie-music-collab-fm2gtpbv1-guillaumeracines-projects.vercel.app/api/dropbox/download?token=${accessToken}&path=${encodeURIComponent(file.path_display)}`;
       
       if (isText) {
         console.log('Loading text file:', file.name);
@@ -347,7 +347,7 @@ function DashboardContent() {
         
         try {
           // First, try to get a direct preview link from Dropbox
-          const previewUrl = `http://localhost:3001/api/dropbox/preview?token=${accessToken}&path=${encodeURIComponent(file.path_display)}`;
+          const previewUrl = `https://roadie-music-collab-fm2gtpbv1-guillaumeracines-projects.vercel.app/api/dropbox/preview?token=${accessToken}&path=${encodeURIComponent(file.path_display)}`;
           console.log('Getting direct preview URL from:', previewUrl);
           
           const previewResponse = await fetch(previewUrl);
@@ -420,7 +420,7 @@ function DashboardContent() {
       console.log('Getting inline audio URL for:', file.name);
       
       // First, try to get a direct preview link from Dropbox
-      const previewUrl = `http://localhost:3001/api/dropbox/preview?token=${accessToken}&path=${encodeURIComponent(filePath)}`;
+      const previewUrl = `https://roadie-music-collab-fm2gtpbv1-guillaumeracines-projects.vercel.app/api/dropbox/preview?token=${accessToken}&path=${encodeURIComponent(filePath)}`;
       
       let audioUrl;
       
@@ -435,7 +435,7 @@ function DashboardContent() {
         }
       } catch (previewError) {
         console.log('Preview request failed, using download URL:', previewError);
-        audioUrl = `http://localhost:3001/api/dropbox/download?token=${accessToken}&path=${encodeURIComponent(filePath)}`;
+        audioUrl = `https://roadie-music-collab-fm2gtpbv1-guillaumeracines-projects.vercel.app/api/dropbox/download?token=${accessToken}&path=${encodeURIComponent(filePath)}`;
       }
 
       // Create or reuse audio element

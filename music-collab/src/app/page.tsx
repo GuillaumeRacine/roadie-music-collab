@@ -21,7 +21,7 @@ export default function Home() {
   const connectToDropbox = async () => {
     setIsConnecting(true);
     try {
-      const response = await fetch(`http://localhost:3001/api/dropbox/auth`, {
+      const response = await fetch(`https://roadie-music-collab-fm2gtpbv1-guillaumeracines-projects.vercel.app/api/dropbox/auth`, {
         method: 'POST',
       });
       const data = await response.json();
