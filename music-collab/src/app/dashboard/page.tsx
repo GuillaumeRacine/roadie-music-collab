@@ -70,7 +70,7 @@ function DashboardContent() {
         const parsedCache = JSON.parse(cacheData);
         const restoredCache = new Map();
         
-        Object.entries(parsedCache).forEach(([path, data]: [string, { files: DropboxFile[], timestamp: number }]) => {
+        Object.entries(parsedCache as Record<string, { files: DropboxFile[], timestamp: number }>).forEach(([path, data]) => {
           // Only restore cache that's less than 10 minutes old
           if (Date.now() - data.timestamp < 10 * 60 * 1000) {
             restoredCache.set(path, data);
