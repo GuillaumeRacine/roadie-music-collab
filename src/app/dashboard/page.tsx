@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -16,20 +15,29 @@ interface DropboxFile {
 }
 
 export default function Dashboard() {
-  const searchParams = useSearchParams();
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [searchParamsToken, setSearchParamsToken] = useState<string | null>(null);
   const [files, setFiles] = useState<DropboxFile[]>([]);
   const [currentPath, setCurrentPath] = useState('');
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
 
+  // Client-side only effect to extract token from URL
   useEffect(() => {
-    const token = searchParams?.get('token');
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlToken = urlParams.get('token');
+      setSearchParamsToken(urlToken);
+    }
+  }, []);
+
+  useEffect(() => {
+    const token = searchParamsToken;
     if (token) {
       setAccessToken(token);
       loadFiles(token, '');
     }
-  }, [searchParams]);
+  }, [searchParamsToken]);
 
   const loadFiles = async (token: string, path: string) => {
     setLoading(true);
