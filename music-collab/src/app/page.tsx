@@ -21,7 +21,7 @@ export default function Home() {
   const connectToDropbox = async () => {
     setIsConnecting(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'}/api/dropbox/auth`, {
+      const response = await fetch(`http://localhost:3001/api/dropbox/auth`, {
         method: 'POST',
       });
       const data = await response.json();
