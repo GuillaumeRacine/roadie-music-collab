@@ -4,24 +4,27 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { apiUrl } from '@/lib/api';
 
 export default function Home() {
   const [isConnecting, setIsConnecting] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    // Check if user is already logged in by checking localStorage for token
-    const savedToken = localStorage.getItem('dropbox_token');
-    if (savedToken) {
-      // Redirect to dashboard if already logged in
-      router.push(`/dashboard?token=${savedToken}`);
-    }
+    // Try pinging files endpoint to detect active session
+    const checkSession = async () => {
+      try {
+        const resp = await fetch(apiUrl('/api/dropbox/files?path='), { credentials: 'include' });
+        if (resp.ok) router.push('/dashboard');
+      } catch {}
+    };
+    checkSession();
   }, [router]);
 
   const connectToDropbox = async () => {
     setIsConnecting(true);
     try {
-      const response = await fetch(`https://roadie-music-collab-bmgdru92q-guillaumeracines-projects.vercel.app/api/dropbox/auth`, {
+      const response = await fetch(apiUrl('/api/dropbox/auth'), {
         method: 'POST',
       });
       const data = await response.json();

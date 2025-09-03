@@ -1,13 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DropboxService } from '@/lib/dropbox';
+import { getCorsHeaders } from '@/lib/config';
+import { ensureAccessToken } from '@/lib/session';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const accessToken = searchParams.get('token');
+  const accessTokenFromQuery = searchParams.get('token');
   const path = searchParams.get('path');
 
   console.log('Preview request:', { path, hasToken: !!accessToken });
 
+  // Cookies first, fallback to query
+  const ensured = await ensureAccessToken(request);
+  const accessToken = ensured?.accessToken || accessTokenFromQuery;
   if (!accessToken || !path) {
     console.error('Missing required parameters:', { hasToken: !!accessToken, hasPath: !!path });
     return NextResponse.json({ error: 'Missing token or path' }, { status: 400 });
@@ -34,17 +39,11 @@ export async function GET(request: NextRequest) {
       console.log('Got shared link:', directUrl);
     }
     
-    return NextResponse.json({ 
-      previewUrl: directUrl,
-      path
-    }, {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Credentials': 'false',
-      },
-    });
+    const res = NextResponse.json({ previewUrl: directUrl, path }, { headers: getCorsHeaders() });
+    if (ensured?.cookiesToSet) {
+      for (const c of ensured.cookiesToSet) res.cookies.set(c.name, c.value, c.options);
+    }
+    return res;
   } catch (error: any) {
     console.error('Error getting preview link:', error);
     console.error('Error details:', {
@@ -52,28 +51,13 @@ export async function GET(request: NextRequest) {
       stack: error.stack,
       name: error.name
     });
-    return NextResponse.json({ 
-      error: 'Failed to get preview link',
-      details: error.message 
-    }, { 
-      status: 500,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Credentials': 'false',
-      }
-    });
+    return NextResponse.json(
+      { error: 'Failed to get preview link', details: error.message },
+      { status: 500, headers: getCorsHeaders() }
+    );
   }
 }
 
 export async function OPTIONS() {
-  return new Response(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    },
-  });
+  return new Response(null, { status: 200, headers: getCorsHeaders() });
 }

@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DropboxService } from '@/lib/dropbox';
+import { getCorsHeaders } from '@/lib/config';
+import { ensureAccessToken } from '@/lib/session';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const accessToken = searchParams.get('token');
+  const accessTokenFromQuery = searchParams.get('token');
   const path = searchParams.get('path');
 
   console.log('Download request:', { path, hasToken: !!accessToken });
 
+  const ensured = await ensureAccessToken(request);
+  const accessToken = ensured?.accessToken || accessTokenFromQuery;
   if (!accessToken || !path) {
     console.error('Missing required parameters:', { hasToken: !!accessToken, hasPath: !!path });
     return NextResponse.json({ error: 'Missing token or path' }, { status: 400 });
@@ -49,18 +53,25 @@ export async function GET(request: NextRequest) {
 
     const fileName = path.split('/').pop() || 'download';
     
-    return new Response(fileBlob, {
+    const res = new Response(fileBlob, {
       headers: {
+        ...getCorsHeaders(),
         'Content-Type': contentType,
         'Content-Disposition': `inline; filename="${fileName}"`,
         'Accept-Ranges': 'bytes',
         'Cache-Control': 'public, max-age=3600',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Credentials': 'false',
       },
     });
+    // Note: cannot set cookies on a plain Response easily; return NextResponse instead if we refreshed
+    if (ensured?.cookiesToSet?.length) {
+      const nres = NextResponse.next();
+      for (const c of ensured.cookiesToSet) nres.cookies.set(c.name, c.value, c.options);
+      // Merge headers
+      for (const [k, v] of (res.headers as any).entries()) nres.headers.set(k, v);
+      // Return body with headers
+      return new Response(fileBlob, { headers: nres.headers });
+    }
+    return res;
   } catch (error: any) {
     console.error('Error downloading file:', error);
     console.error('Error details:', {
@@ -68,28 +79,13 @@ export async function GET(request: NextRequest) {
       stack: error.stack,
       name: error.name
     });
-    return NextResponse.json({ 
-      error: 'Failed to download file',
-      details: error.message 
-    }, { 
-      status: 500,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Credentials': 'false',
-      }
-    });
+    return NextResponse.json(
+      { error: 'Failed to download file', details: error.message },
+      { status: 500, headers: getCorsHeaders() }
+    );
   }
 }
 
 export async function OPTIONS() {
-  return new Response(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': 'https://music-collab-gqvcb6ame-guillaumeracines-projects.vercel.app',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    },
-  });
+  return new Response(null, { status: 200, headers: getCorsHeaders() });
 }

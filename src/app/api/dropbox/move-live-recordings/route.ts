@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DropboxService } from '@/lib/dropbox';
+import { MUSIC_BASE_PATH } from '@/lib/config';
+import { ensureAccessToken } from '@/lib/session';
 
 export async function POST(request: NextRequest) {
   try {
-    const formData = await request.formData();
-    const accessToken = formData.get('token') as string;
+    const ensured = await ensureAccessToken(request);
+    const accessToken = ensured?.accessToken;
 
     if (!accessToken) {
       return NextResponse.json({ error: 'No access token provided' }, { status: 401 });
@@ -18,11 +20,15 @@ export async function POST(request: NextRequest) {
 
     const result = await moveLiveRecordingsToUploads(dropboxService);
 
-    return NextResponse.json({ 
+    const res = NextResponse.json({ 
       success: true, 
       message: `Moved ${result.movedCount} files from Live Recordings to New Uploads`,
       details: result.details
     });
+    if (ensured?.cookiesToSet) {
+      for (const c of ensured.cookiesToSet) res.cookies.set(c.name, c.value, c.options);
+    }
+    return res;
   } catch (error) {
     console.error('Error moving live recordings:', error);
     return NextResponse.json({ error: 'Failed to move live recordings' }, { status: 500 });
@@ -30,8 +36,8 @@ export async function POST(request: NextRequest) {
 }
 
 async function moveLiveRecordingsToUploads(dropboxService: DropboxService) {
-  const liveRecordingsPath = '/Music/Fiasco Total/Live Recordings';
-  const uploadsPath = '/Music/Fiasco Total/New Uploads';
+  const liveRecordingsPath = `${MUSIC_BASE_PATH}/Live Recordings`;
+  const uploadsPath = `${MUSIC_BASE_PATH}/New Uploads`;
   
   const results = {
     movedCount: 0,

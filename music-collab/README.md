@@ -4,13 +4,13 @@ This is the frontend client for the Roadie Music Collaboration Hub. It's a Next.
 
 ## Architecture
 
-This frontend is designed to be a separate client that communicates with the main Roadie backend API server running on port 3000.
+This frontend is designed to be a separate client that communicates with the main Roadie backend API server running on port 3001.
 
 ## Getting Started
 
 ### Prerequisites
 
-Make sure the main Roadie backend is running on `http://localhost:3000` before starting this frontend.
+Make sure the main Roadie backend is running on `http://localhost:3001` before starting this frontend.
 
 ### Frontend Setup
 
@@ -24,9 +24,9 @@ Make sure the main Roadie backend is running on `http://localhost:3000` before s
    cp .env.local.example .env.local
    ```
    
-   The default configuration points to `http://localhost:3000` for the backend API. Modify if needed:
-   ```
-   NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
+The default configuration points to `http://localhost:3001` for the backend API. Modify if needed:
+```
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3001
    ```
 
 3. **Run the frontend development server:**
@@ -47,9 +47,9 @@ Make sure the main Roadie backend is running on `http://localhost:3000` before s
 ## Development
 
 ```bash
-npm run dev       # Start development server on port 3001
+npm run dev       # Start development server on port 3000
 npm run build     # Build for production
-npm run start     # Start production server on port 3001
+npm run start     # Start production server on port 3000
 npm run lint      # Run ESLint
 ```
 

@@ -6,6 +6,8 @@
     "dev": "concurrently --names \"BACKEND,FRONTEND\" --prefix-colors \"blue,green\" \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "next dev --turbopack --port 3001",
     "dev:frontend": "cd music-collab && npm run dev",
+    "ports:free": "node -e \"const {execSync}=require('child_process'); ['3000','3001'].forEach(p=>{try{execSync('lsof -ti tcp:'+p+' -sTCP:LISTEN | xargs kill -9',{stdio:'ignore'})}catch(e){}})\"",
+    "dev:clean": "npm run ports:free && npm run dev",
     "build": "npm run build:backend && npm run build:frontend",
     "build:backend": "next build --turbopack",
     "build:frontend": "cd music-collab && npm run build",
@@ -24,6 +26,7 @@
     "dropbox": "^10.34.0",
     "lucide-react": "^0.542.0",
     "next": "15.5.2",
+    "openai": "^5.19.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "tailwind-merge": "^3.3.1"

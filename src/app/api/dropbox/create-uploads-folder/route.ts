@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DropboxService } from '@/lib/dropbox';
+import { MUSIC_BASE_PATH } from '@/lib/config';
+import { ensureAccessToken } from '@/lib/session';
 
 export async function POST(request: NextRequest) {
   try {
-    const formData = await request.formData();
-    const accessToken = formData.get('token') as string;
+    const ensured = await ensureAccessToken(request);
+    const accessToken = ensured?.accessToken;
 
     if (!accessToken) {
       return NextResponse.json({ error: 'No access token provided' }, { status: 401 });
@@ -18,11 +20,15 @@ export async function POST(request: NextRequest) {
 
     const result = await createUploadsAndMoveFiles(dropboxService);
 
-    return NextResponse.json({ 
+    const res = NextResponse.json({ 
       success: true, 
       message: `Created Uploads folder and moved ${result.movedCount} files`,
       details: result.details
     });
+    if (ensured?.cookiesToSet) {
+      for (const c of ensured.cookiesToSet) res.cookies.set(c.name, c.value, c.options);
+    }
+    return res;
   } catch (error) {
     console.error('Error creating uploads folder:', error);
     return NextResponse.json({ error: 'Failed to create uploads folder and move files' }, { status: 500 });
@@ -30,7 +36,7 @@ export async function POST(request: NextRequest) {
 }
 
 async function createUploadsAndMoveFiles(dropboxService: DropboxService) {
-  const basePath = '/Music/Fiasco Total';
+  const basePath = MUSIC_BASE_PATH;
   const uploadsPath = `${basePath}/Uploads`;
   
   const results = {
@@ -49,11 +55,11 @@ async function createUploadsAndMoveFiles(dropboxService: DropboxService) {
       results.details.push('Uploads folder already exists');
     }
 
-    // Find all unarchived .m4a files from the 2025 folders
+    // Find all unarchived .m4a files from the active year folders
     const foldersToProcess = [
-      'Live Recordings/2025',
-      'New Song Ideas/2025',
-      'Lyrics/2025'
+      `Live Recordings/${process.env.MUSIC_ACTIVE_YEAR || '2025'}`,
+      `New Song Ideas/${process.env.MUSIC_ACTIVE_YEAR || '2025'}`,
+      `Lyrics/${process.env.MUSIC_ACTIVE_YEAR || '2025'}`
     ];
 
     for (const folderName of foldersToProcess) {

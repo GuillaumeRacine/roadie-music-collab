@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DropboxService } from '@/lib/dropbox';
+import { MUSIC_ACTIVE_YEAR, MUSIC_BASE_PATH } from '@/lib/config';
+import { ensureAccessToken } from '@/lib/session';
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    const accessToken = formData.get('token') as string;
-    const targetFolder = formData.get('folder') as string || '/Music/Fiasco Total/Live Recordings';
+    const ensured = await ensureAccessToken(request);
+    const accessToken = ensured?.accessToken;
+    const targetFolder = (formData.get('folder') as string) || `${MUSIC_BASE_PATH}/Live Recordings`;
 
     if (!accessToken) {
       return NextResponse.json({ error: 'No access token provided' }, { status: 401 });
@@ -19,11 +22,15 @@ export async function POST(request: NextRequest) {
 
     const result = await renameFilesByDate(dropboxService, targetFolder);
 
-    return NextResponse.json({ 
+    const res = NextResponse.json({ 
       success: true, 
       message: `Renamed ${result.renamedCount} files in ${targetFolder}`,
       details: result.details
     });
+    if (ensured?.cookiesToSet) {
+      for (const c of ensured.cookiesToSet) res.cookies.set(c.name, c.value, c.options);
+    }
+    return res;
   } catch (error) {
     console.error('Error renaming files by date:', error);
     return NextResponse.json({ error: 'Failed to rename files' }, { status: 500 });
@@ -43,7 +50,7 @@ async function renameFilesByDate(dropboxService: DropboxService, folderPath: str
     // Filter for .m4a files that don't already follow our naming convention
     const m4aFiles = allFiles.filter(file => {
       const isM4a = file.name.toLowerCase().endsWith('.m4a');
-      const alreadyRenamed = /^\d{8}_\d{4}_/.test(file.name); // Check if already follows YYYYMMDD_HHMM_ pattern
+      const alreadyRenamed = /^\d{8}(?:_\d{4})?[_-]?/.test(file.name); // Check if follows YYYYMMDD[_HHMM] pattern
       return isM4a && !alreadyRenamed;
     });
 

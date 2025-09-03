@@ -45,6 +45,9 @@ A full-stack application for organizing, sharing, and collaborating on music ide
    DROPBOX_CLIENT_SECRET=your_app_secret_here
    NEXTAUTH_SECRET=your_random_secret_here
    NEXTAUTH_URL=http://localhost:3001
+   FRONTEND_ORIGIN=http://localhost:3000
+   MUSIC_BASE_PATH=/Music/Fiasco Total
+   MUSIC_ACTIVE_YEAR=2025
    ```
 
 4. **Configure Dropbox App Settings:**

@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DropboxService } from '@/lib/dropbox';
+import { MUSIC_BASE_PATH } from '@/lib/config';
+import { ensureAccessToken } from '@/lib/session';
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    const accessToken = formData.get('token') as string;
-    const targetFolder = formData.get('folder') as string || '/Music/Fiasco Total/Live Recordings';
+    const ensured = await ensureAccessToken(request);
+    const accessToken = ensured?.accessToken;
+    const targetFolder = (formData.get('folder') as string) || `${MUSIC_BASE_PATH}/Live Recordings`;
 
     if (!accessToken) {
       return NextResponse.json({ error: 'No access token provided' }, { status: 401 });
@@ -19,11 +22,15 @@ export async function POST(request: NextRequest) {
 
     const result = await removeLiveRecordingSuffix(dropboxService, targetFolder);
 
-    return NextResponse.json({ 
+    const res = NextResponse.json({ 
       success: true, 
       message: `Updated ${result.renamedCount} files in ${targetFolder}`,
       details: result.details
     });
+    if (ensured?.cookiesToSet) {
+      for (const c of ensured.cookiesToSet) res.cookies.set(c.name, c.value, c.options);
+    }
+    return res;
   } catch (error) {
     console.error('Error removing suffix:', error);
     return NextResponse.json({ error: 'Failed to remove suffix from files' }, { status: 500 });

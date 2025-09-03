@@ -23,7 +23,13 @@ export class DropboxService {
   }
 
   async getAuthUrl(redirectUri: string) {
-    const authUrl = `https://www.dropbox.com/oauth2/authorize?client_id=${this.clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code`;
+    const params = new URLSearchParams({
+      client_id: this.clientId,
+      redirect_uri: redirectUri,
+      response_type: 'code',
+      token_access_type: 'offline',
+    });
+    const authUrl = `https://www.dropbox.com/oauth2/authorize?${params.toString()}`;
     return authUrl;
   }
 
@@ -48,7 +54,11 @@ export class DropboxService {
         throw new Error(data.error_description || 'Failed to get access token');
       }
       
-      return data.access_token;
+      return {
+        access_token: data.access_token as string,
+        refresh_token: data.refresh_token as (string | undefined),
+        expires_in: data.expires_in as (number | undefined),
+      };
     } catch (error) {
       throw new Error(`Failed to get access token: ${error}`);
     }

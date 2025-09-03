@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DropboxService } from '@/lib/dropbox';
+import { MUSIC_BASE_PATH, MUSIC_ACTIVE_YEAR } from '@/lib/config';
+import { ensureAccessToken } from '@/lib/session';
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    const accessToken = formData.get('token') as string;
+    const ensured = await ensureAccessToken(request);
+    const accessToken = ensured?.accessToken || (formData.get('token') as string);
     const action = formData.get('action') as string;
 
     if (!accessToken) {
@@ -31,7 +34,11 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
     }
 
-    return NextResponse.json({ success: true, message: `Action ${action} completed successfully` });
+    const res = NextResponse.json({ success: true, message: `Action ${action} completed successfully` });
+    if (ensured?.cookiesToSet) {
+      for (const c of ensured.cookiesToSet) res.cookies.set(c.name, c.value, c.options);
+    }
+    return res;
   } catch (error) {
     console.error('Error organizing files:', error);
     return NextResponse.json({ error: 'Failed to organize files' }, { status: 500 });
@@ -39,17 +46,17 @@ export async function POST(request: NextRequest) {
 }
 
 async function createFolderStructure(dropboxService: DropboxService) {
-  const basePath = '/Music/Fiasco Total';
+  const basePath = MUSIC_BASE_PATH;
   
   const foldersToCreate = [
     `${basePath}/Live Recordings`,
-    `${basePath}/Live Recordings/2025`,
+    `${basePath}/Live Recordings/${MUSIC_ACTIVE_YEAR}`,
     `${basePath}/Live Recordings/Archive`,
     `${basePath}/New Song Ideas`,
-    `${basePath}/New Song Ideas/2025`,
+    `${basePath}/New Song Ideas/${MUSIC_ACTIVE_YEAR}`,
     `${basePath}/New Song Ideas/Archive`,
     `${basePath}/Lyrics`,
-    `${basePath}/Lyrics/2025`,
+    `${basePath}/Lyrics/${MUSIC_ACTIVE_YEAR}`,
     `${basePath}/Lyrics/Archive`
   ];
 
@@ -65,8 +72,8 @@ async function createFolderStructure(dropboxService: DropboxService) {
 }
 
 async function archiveOldFiles(dropboxService: DropboxService) {
-  const basePath = '/Music/Fiasco Total';
-  const cutoffDate = new Date('2025-04-01');
+  const basePath = MUSIC_BASE_PATH;
+  const cutoffDate = new Date(`${MUSIC_ACTIVE_YEAR}-04-01`);
   
   const foldersToProcess = [
     'Live Recordings',
@@ -104,7 +111,7 @@ async function archiveOldFiles(dropboxService: DropboxService) {
 }
 
 async function organizeExistingFiles(dropboxService: DropboxService) {
-  const basePath = '/Music/Fiasco Total';
+  const basePath = MUSIC_BASE_PATH;
   
   try {
     const files = await dropboxService.listFiles(basePath);
@@ -118,14 +125,14 @@ async function organizeExistingFiles(dropboxService: DropboxService) {
         
         // Categorize files based on name patterns
         if (fileName.includes('recording') || fileName.includes('live') || fileName.includes('rehearsal')) {
-          targetFolder = 'Live Recordings/2025';
+          targetFolder = `Live Recordings/${MUSIC_ACTIVE_YEAR}`;
         } else if (fileName.includes('idea') || fileName.includes('demo') || fileName.includes('sketch')) {
-          targetFolder = 'New Song Ideas/2025';
+          targetFolder = `New Song Ideas/${MUSIC_ACTIVE_YEAR}`;
         } else if (fileName.includes('lyric') || fileName.includes('.txt') || fileName.includes('.md')) {
-          targetFolder = 'Lyrics/2025';
+          targetFolder = `Lyrics/${MUSIC_ACTIVE_YEAR}`;
         } else if (fileName.includes('.m4a') || fileName.includes('.mp3') || fileName.includes('.wav')) {
           // Default audio files to Live Recordings
-          targetFolder = 'Live Recordings/2025';
+          targetFolder = `Live Recordings/${MUSIC_ACTIVE_YEAR}`;
         }
         
         if (targetFolder) {
@@ -145,17 +152,5 @@ async function organizeExistingFiles(dropboxService: DropboxService) {
 }
 
 async function moveFile(dropboxService: DropboxService, fromPath: string, toPath: string) {
-  // Using the existing Dropbox service, we'll need to add a move method
-  // For now, we'll implement it directly here
-  const dbx = (dropboxService as any).dbx;
-  
-  try {
-    await dbx.filesMoveV2({
-      from_path: fromPath,
-      to_path: toPath,
-      autorename: true
-    });
-  } catch (error) {
-    throw new Error(`Failed to move file: ${error}`);
-  }
+  await dropboxService.moveFile(fromPath, toPath);
 }

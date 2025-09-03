@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DropboxService } from '@/lib/dropbox';
+import { ensureAccessToken } from '@/lib/session';
+import { MUSIC_BASE_PATH } from '@/lib/config';
 
 export async function POST(request: NextRequest) {
   try {
-    const formData = await request.formData();
-    const accessToken = formData.get('token') as string;
+    const ensured = await ensureAccessToken(request);
+    const accessToken = ensured?.accessToken;
 
     if (!accessToken) {
       return NextResponse.json({ error: 'No access token provided' }, { status: 401 });
@@ -18,7 +20,11 @@ export async function POST(request: NextRequest) {
 
     await moveSongIdeasFiles(dropboxService);
 
-    return NextResponse.json({ success: true, message: 'Song ideas files moved and organized successfully' });
+    const res = NextResponse.json({ success: true, message: 'Song ideas files moved and organized successfully' });
+    if (ensured?.cookiesToSet) {
+      for (const c of ensured.cookiesToSet) res.cookies.set(c.name, c.value, c.options);
+    }
+    return res;
   } catch (error) {
     console.error('Error moving song ideas:', error);
     return NextResponse.json({ error: 'Failed to move song ideas files' }, { status: 500 });
@@ -26,7 +32,7 @@ export async function POST(request: NextRequest) {
 }
 
 async function moveSongIdeasFiles(dropboxService: DropboxService) {
-  const basePath = '/Music/Fiasco Total';
+  const basePath = MUSIC_BASE_PATH;
   const cutoffDate = new Date('2025-04-01');
   
   try {

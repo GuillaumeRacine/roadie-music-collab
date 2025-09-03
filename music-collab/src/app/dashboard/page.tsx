@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
+import { apiUrl } from '@/lib/api';
 
 // Force dynamic rendering for this page
 export const dynamic = 'force-dynamic';
@@ -16,8 +17,6 @@ interface DropboxFile {
 }
 
 function DashboardContent() {
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [searchParamsToken, setSearchParamsToken] = useState<string | null>(null);
   const [files, setFiles] = useState<DropboxFile[]>([]);
   const [currentPath, setCurrentPath] = useState('');
   const [loading, setLoading] = useState(false);
@@ -28,30 +27,12 @@ function DashboardContent() {
   const [playingAudio, setPlayingAudio] = useState<{[filePath: string]: {url: string, isPlaying: boolean}}>({});
   const [audioElements, setAudioElements] = useState<{[filePath: string]: HTMLAudioElement}>({});
 
-  // Client-side only effect to extract token from URL
+  // Bootstrap: restore cache and load default folder using cookie session
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      const urlToken = urlParams.get('token');
-      setSearchParamsToken(urlToken);
-    }
+    restoreCache();
+    const savedPath = localStorage.getItem('current_dropbox_path') || '/Music/Fiasco Total';
+    loadFiles(savedPath);
   }, []);
-
-  useEffect(() => {
-    const token = searchParamsToken || localStorage.getItem('dropbox_token');
-    if (token) {
-      setAccessToken(token);
-      // Save token to localStorage for persistence
-      localStorage.setItem('dropbox_token', token);
-      
-      // Restore cache from localStorage
-      restoreCache();
-      
-      // Get saved path or use default
-      const savedPath = localStorage.getItem('current_dropbox_path') || '/MUSIC/Fiasco Total';
-      loadFiles(token, savedPath);
-    }
-  }, [searchParamsToken]); // loadFiles is recreated on every render, so we don't include it
 
   useEffect(() => {
     // Hide the initial animation after 5 seconds
@@ -118,7 +99,7 @@ function DashboardContent() {
     console.log('Cleared cache for:', path);
   };
 
-  const loadFiles = async (token: string, path: string) => {
+  const loadFiles = async (path: string) => {
     // Check cache first
     const cachedFiles = getCachedData(path);
     if (cachedFiles) {
@@ -131,7 +112,7 @@ function DashboardContent() {
     setLoading(true);
     try {
       console.log('Loading files from path:', path);
-      const response = await fetch(`https://roadie-music-collab-bmgdru92q-guillaumeracines-projects.vercel.app/api/dropbox/files?token=${token}&path=${encodeURIComponent(path)}`);
+      const response = await fetch(apiUrl(`/api/dropbox/files?path=${encodeURIComponent(path)}`), { credentials: 'include' });
       const data = await response.json();
       
       if (!response.ok) {
@@ -139,9 +120,8 @@ function DashboardContent() {
         console.error('Error details:', data.details);
         
         // Check for expired token
-        if (data.error?.includes('expired_access_token')) {
-          alert('Your Dropbox session has expired. Please reconnect.');
-          localStorage.removeItem('dropbox_token');
+        if (response.status === 401) {
+          alert('Your Dropbox session is missing or expired. Please reconnect.');
           window.location.href = '/';
           return;
         }
@@ -149,7 +129,7 @@ function DashboardContent() {
         if (data.error?.includes('path/not_found') || data.error?.includes('Folder not found')) {
           // If folder not found, try loading from root
           console.log('Folder not found, loading from root');
-          const rootResponse = await fetch(`https://roadie-music-collab-bmgdru92q-guillaumeracines-projects.vercel.app/api/dropbox/files?token=${token}&path=`);
+          const rootResponse = await fetch(apiUrl(`/api/dropbox/files?path=`), { credentials: 'include' });
           const rootData = await rootResponse.json();
           if (rootData.files) {
             setFiles(rootData.files);
@@ -181,7 +161,7 @@ function DashboardContent() {
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file || !accessToken) return;
+    if (!file) return;
 
     setUploading(true);
     try {
@@ -201,23 +181,22 @@ function DashboardContent() {
       formData.append('file', file);
       
       // Determine target folder based on current location or file type
-      let targetFolder = '/MUSIC/Fiasco Total/Live Recordings/2025';
+      let targetFolder = '/Music/Fiasco Total/Live Recordings/2025';
       
       if (currentPath.includes('/New Uploads')) {
-        targetFolder = '/MUSIC/Fiasco Total/New Uploads';
+        targetFolder = '/Music/Fiasco Total/New Uploads';
       } else if (currentPath.includes('/Lyrics')) {
-        targetFolder = '/MUSIC/Fiasco Total/Lyrics/2025';
+        targetFolder = '/Music/Fiasco Total/Lyrics/2025';
       } else if (currentPath.includes('/Live Recordings')) {
         targetFolder = currentPath;
       }
       
       const uploadPath = `${targetFolder}/${organizedName}`;
       formData.append('path', uploadPath);
-      formData.append('token', accessToken);
-
-      const response = await fetch(`https://roadie-music-collab-bmgdru92q-guillaumeracines-projects.vercel.app/api/dropbox/files`, {
+      const response = await fetch(apiUrl('/api/dropbox/files'), {
         method: 'POST',
         body: formData,
+        credentials: 'include',
       });
 
       if (response.ok) {
@@ -229,10 +208,10 @@ function DashboardContent() {
         
         // Navigate to the folder where file was uploaded if not already there
         if (currentPath !== targetFolder) {
-          loadFiles(accessToken, targetFolder);
+          loadFiles(targetFolder);
         } else {
           // Reload files in current directory
-          loadFiles(accessToken, currentPath);
+          loadFiles(currentPath);
         }
         alert(`File uploaded as: ${organizedName}`);
       }
@@ -244,43 +223,37 @@ function DashboardContent() {
   };
 
   const navigateToFolder = (folderPath: string) => {
-    if (accessToken) {
-      loadFiles(accessToken, folderPath);
-    }
+    loadFiles(folderPath);
   };
 
   const goBack = () => {
     const parentPath = currentPath.split('/').slice(0, -1).join('/');
     
-    if (accessToken) {
-      loadFiles(accessToken, parentPath);
-    }
+    loadFiles(parentPath);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('dropbox_token');
-    window.location.href = '/';
+    fetch(apiUrl('/api/auth/logout'), { method: 'POST', credentials: 'include' })
+      .finally(() => { window.location.href = '/'; });
   };
 
   const organizeFiles = async (action: string) => {
-    if (!accessToken) return;
-    
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append('token', accessToken);
       formData.append('action', action);
 
-      const response = await fetch(`https://roadie-music-collab-bmgdru92q-guillaumeracines-projects.vercel.app/api/dropbox/organize`, {
+      const response = await fetch(apiUrl('/api/dropbox/organize'), {
         method: 'POST',
         body: formData,
+        credentials: 'include',
       });
 
       const result = await response.json();
       if (response.ok) {
         alert(`Success: ${result.message}`);
         // Reload files to show new structure
-        loadFiles(accessToken, '/MUSIC/Fiasco Total');
+        loadFiles('/Music/Fiasco Total');
       } else {
         alert(`Error: ${result.error}`);
       }
@@ -324,15 +297,13 @@ function DashboardContent() {
   };
 
   const previewFileContent = async (file: DropboxFile) => {
-    if (!accessToken) return;
-
     try {
       const isText = isTextFile(file.name);
       const isAudio = isAudioFile(file.name);
       
       if (!isText && !isAudio) return;
 
-      const downloadUrl = `https://roadie-music-collab-bmgdru92q-guillaumeracines-projects.vercel.app/api/dropbox/download?token=${accessToken}&path=${encodeURIComponent(file.path_display)}`;
+      const downloadUrl = apiUrl(`/api/dropbox/download?path=${encodeURIComponent(file.path_display)}`);
       
       if (isText) {
         console.log('Loading text file:', file.name);
@@ -347,10 +318,10 @@ function DashboardContent() {
         
         try {
           // First, try to get a direct preview link from Dropbox
-          const previewUrl = `https://roadie-music-collab-bmgdru92q-guillaumeracines-projects.vercel.app/api/dropbox/preview?token=${accessToken}&path=${encodeURIComponent(file.path_display)}`;
+          const previewUrl = apiUrl(`/api/dropbox/preview?path=${encodeURIComponent(file.path_display)}`);
           console.log('Getting direct preview URL from:', previewUrl);
           
-          const previewResponse = await fetch(previewUrl);
+          const previewResponse = await fetch(previewUrl, { credentials: 'include' });
           if (previewResponse.ok) {
             const previewData = await previewResponse.json();
             console.log('Got direct preview URL:', previewData.previewUrl);
@@ -378,7 +349,7 @@ function DashboardContent() {
         // Fallback to the original download URL
         console.log('Using fallback download URL:', downloadUrl);
         try {
-          const testResponse = await fetch(downloadUrl, { method: 'HEAD' });
+          const testResponse = await fetch(downloadUrl, { method: 'HEAD', credentials: 'include' });
           if (!testResponse.ok) {
             console.error('Audio file test failed:', testResponse.status, testResponse.statusText);
             const errorText = await testResponse.text();
@@ -402,7 +373,6 @@ function DashboardContent() {
   };
 
   const handleInlineAudioPlay = async (file: DropboxFile) => {
-    if (!accessToken) return;
     
     const filePath = file.path_display;
     
@@ -420,12 +390,12 @@ function DashboardContent() {
       console.log('Getting inline audio URL for:', file.name);
       
       // First, try to get a direct preview link from Dropbox
-      const previewUrl = `https://roadie-music-collab-bmgdru92q-guillaumeracines-projects.vercel.app/api/dropbox/preview?token=${accessToken}&path=${encodeURIComponent(filePath)}`;
+      const previewUrl = apiUrl(`/api/dropbox/preview?path=${encodeURIComponent(filePath)}`);
       
       let audioUrl;
       
       try {
-        const previewResponse = await fetch(previewUrl);
+        const previewResponse = await fetch(previewUrl, { credentials: 'include' });
         if (previewResponse.ok) {
           const previewData = await previewResponse.json();
           audioUrl = previewData.previewUrl;
@@ -435,7 +405,7 @@ function DashboardContent() {
         }
       } catch (previewError) {
         console.log('Preview request failed, using download URL:', previewError);
-        audioUrl = `https://roadie-music-collab-bmgdru92q-guillaumeracines-projects.vercel.app/api/dropbox/download?token=${accessToken}&path=${encodeURIComponent(filePath)}`;
+        audioUrl = apiUrl(`/api/dropbox/download?path=${encodeURIComponent(filePath)}`);
       }
 
       // Create or reuse audio element
@@ -488,23 +458,7 @@ function DashboardContent() {
     }
   };
 
-  if (!accessToken) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-gray-900 to-indigo-900 text-cyan-300 font-mono flex items-center justify-center">
-        <div className="border-2 border-pink-500/70 bg-black/80 backdrop-blur-sm p-6 max-w-md rounded-lg shadow-xl shadow-pink-500/30">
-          <h2 className="text-white font-bold mb-3 drop-shadow-lg">&gt;&gt;&gt; ACCESS DENIED &lt;&lt;&lt;</h2>
-          <p className="text-sm mb-4 text-cyan-300">NO DROPBOX TOKEN DETECTED</p>
-          <p className="text-xs text-cyan-400/70 mb-4">PLEASE CONNECT YOUR ACCOUNT TO PROCEED</p>
-          <button 
-            onClick={() => window.location.href = '/'} 
-            className="w-full px-4 py-2 bg-pink-600 hover:bg-pink-500 text-white border border-pink-400 font-bold text-sm rounded shadow-lg hover:shadow-pink-500/50 transition-all"
-          >
-            [RETURN TO LOGIN]
-          </button>
-        </div>
-      </div>
-    );
-  }
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-gray-900 to-indigo-900 text-cyan-300 font-mono">
