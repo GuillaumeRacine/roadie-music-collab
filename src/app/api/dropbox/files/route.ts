@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     console.log(`API: Found ${files.length} files/folders`);
     return NextResponse.json({ files }, {
       headers: {
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Access-Control-Allow-Origin': 'https://music-collab-gqvcb6ame-guillaumeracines-projects.vercel.app',
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
       }
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
       }, { 
         status: 404,
         headers: {
-          'Access-Control-Allow-Origin': 'http://localhost:3000',
+          'Access-Control-Allow-Origin': 'https://music-collab-gqvcb6ame-guillaumeracines-projects.vercel.app',
           'Access-Control-Allow-Methods': 'GET, OPTIONS',
           'Access-Control-Allow-Headers': 'Content-Type',
         }
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
     }, { 
       status: 500,
       headers: {
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Access-Control-Allow-Origin': 'https://music-collab-gqvcb6ame-guillaumeracines-projects.vercel.app',
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
       }
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
     const result = await dropboxService.uploadFile(file, path);
     return NextResponse.json({ file: result }, {
       headers: {
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Access-Control-Allow-Origin': 'https://music-collab-gqvcb6ame-guillaumeracines-projects.vercel.app',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
       }
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Failed to upload file' }, { 
       status: 500,
       headers: {
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Access-Control-Allow-Origin': 'https://music-collab-gqvcb6ame-guillaumeracines-projects.vercel.app',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
       }
@@ -113,7 +113,7 @@ export async function OPTIONS() {
   return new Response(null, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': 'http://localhost:3000',
+      'Access-Control-Allow-Origin': 'https://music-collab-gqvcb6ame-guillaumeracines-projects.vercel.app',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     },

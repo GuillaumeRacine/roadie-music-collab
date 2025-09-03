@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     // For now, we'll redirect with the token as a query param
     // Redirect to frontend URL (port 3000) instead of backend
     return NextResponse.redirect(
-      `http://localhost:3000/dashboard?token=${accessToken}`
+      `https://music-collab-gqvcb6ame-guillaumeracines-projects.vercel.app/dashboard?token=${accessToken}`
     );
   } catch (error) {
     console.error('Dropbox auth error:', error);
@@ -45,7 +45,7 @@ export async function POST() {
 
     return NextResponse.json({ authUrl }, {
       headers: {
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Access-Control-Allow-Origin': 'https://music-collab-gqvcb6ame-guillaumeracines-projects.vercel.app',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
       }
@@ -55,7 +55,7 @@ export async function POST() {
     return NextResponse.json({ error: 'Failed to generate auth URL' }, { 
       status: 500,
       headers: {
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Access-Control-Allow-Origin': 'https://music-collab-gqvcb6ame-guillaumeracines-projects.vercel.app',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
       }
@@ -67,7 +67,7 @@ export async function OPTIONS() {
   return new Response(null, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': 'http://localhost:3000',
+      'Access-Control-Allow-Origin': 'https://music-collab-gqvcb6ame-guillaumeracines-projects.vercel.app',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     },
