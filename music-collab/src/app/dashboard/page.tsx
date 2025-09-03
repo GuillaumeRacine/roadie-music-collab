@@ -1,9 +1,6 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 // Force dynamic rendering for this page
 export const dynamic = 'force-dynamic';
@@ -19,7 +16,6 @@ interface DropboxFile {
 }
 
 function DashboardContent() {
-  const router = useRouter();
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [searchParamsToken, setSearchParamsToken] = useState<string | null>(null);
   const [files, setFiles] = useState<DropboxFile[]>([]);
@@ -55,7 +51,7 @@ function DashboardContent() {
       const savedPath = localStorage.getItem('current_dropbox_path') || '/MUSIC/Fiasco Total';
       loadFiles(token, savedPath);
     }
-  }, [searchParamsToken]);
+  }, [searchParamsToken]); // loadFiles is recreated on every render, so we don't include it
 
   useEffect(() => {
     // Hide the initial animation after 5 seconds
@@ -74,7 +70,7 @@ function DashboardContent() {
         const parsedCache = JSON.parse(cacheData);
         const restoredCache = new Map();
         
-        Object.entries(parsedCache).forEach(([path, data]: [string, any]) => {
+        Object.entries(parsedCache).forEach(([path, data]: [string, { files: DropboxFile[], timestamp: number }]) => {
           // Only restore cache that's less than 10 minutes old
           if (Date.now() - data.timestamp < 10 * 60 * 1000) {
             restoredCache.set(path, data);
@@ -663,7 +659,7 @@ function DashboardContent() {
                       Your browser does not support the audio element.
                     </audio>
                     <p className="text-xs text-gray-400 mt-2">
-                      If audio doesn't play, try refreshing or check browser console for errors.
+                      If audio doesn&apos;t play, try refreshing or check browser console for errors.
                     </p>
                   </div>
                 </div>

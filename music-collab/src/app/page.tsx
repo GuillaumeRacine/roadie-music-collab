@@ -7,14 +7,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function Home() {
   const [isConnecting, setIsConnecting] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     // Check if user is already logged in by checking localStorage for token
     const savedToken = localStorage.getItem('dropbox_token');
     if (savedToken) {
-      setIsLoggedIn(true);
       // Redirect to dashboard if already logged in
       router.push(`/dashboard?token=${savedToken}`);
     }
