@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { apiUrl } from '@/lib/api';
+import AIChat from '@/components/ai-chat';
 
 // Force dynamic rendering for this page
 export const dynamic = 'force-dynamic';
@@ -372,6 +373,39 @@ function DashboardContent() {
     }
   };
 
+  const handleFileOperation = async (operation: string, files?: string[]) => {
+    try {
+      console.log('Executing file operation:', operation, files);
+      
+      const response = await fetch(apiUrl('/api/ai/file-operations'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          operation,
+          files,
+          targetPath: currentPath,
+        }),
+      });
+
+      const result = await response.json();
+      
+      if (response.ok) {
+        console.log('File operation successful:', result);
+        // Refresh the current directory to show changes
+        loadFiles(currentPath);
+      } else {
+        console.error('File operation failed:', result);
+        alert(`Operation failed: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Error executing file operation:', error);
+      alert('Failed to execute file operation');
+    }
+  };
+
   const handleInlineAudioPlay = async (file: DropboxFile) => {
     
     const filePath = file.path_display;
@@ -625,6 +659,13 @@ function DashboardContent() {
             </div>
           </div>
         )}
+
+        {/* AI Chat Assistant */}
+        <AIChat 
+          currentPath={currentPath} 
+          files={files} 
+          onFileOperation={handleFileOperation}
+        />
 
       </div>
     </div>
