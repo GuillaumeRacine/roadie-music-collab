@@ -68,7 +68,7 @@ export class DropboxService {
       const response = await this.dbx.filesUpload({
         path,
         contents: file,
-        mode: 'add',
+        mode: { '.tag': 'add' },
         autorename: true
       });
       return response.result;
