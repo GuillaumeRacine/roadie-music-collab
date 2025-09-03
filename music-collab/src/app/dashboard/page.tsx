@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -19,9 +19,9 @@ interface DropboxFile {
 }
 
 function DashboardContent() {
-  const searchParams = useSearchParams();
   const router = useRouter();
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [searchParamsToken, setSearchParamsToken] = useState<string | null>(null);
   const [files, setFiles] = useState<DropboxFile[]>([]);
   const [currentPath, setCurrentPath] = useState('');
   const [loading, setLoading] = useState(false);
@@ -32,8 +32,17 @@ function DashboardContent() {
   const [playingAudio, setPlayingAudio] = useState<{[filePath: string]: {url: string, isPlaying: boolean}}>({});
   const [audioElements, setAudioElements] = useState<{[filePath: string]: HTMLAudioElement}>({});
 
+  // Client-side only effect to extract token from URL
   useEffect(() => {
-    const token = searchParams?.get('token') || localStorage.getItem('dropbox_token');
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlToken = urlParams.get('token');
+      setSearchParamsToken(urlToken);
+    }
+  }, []);
+
+  useEffect(() => {
+    const token = searchParamsToken || localStorage.getItem('dropbox_token');
     if (token) {
       setAccessToken(token);
       // Save token to localStorage for persistence
@@ -46,7 +55,7 @@ function DashboardContent() {
       const savedPath = localStorage.getItem('current_dropbox_path') || '/MUSIC/Fiasco Total';
       loadFiles(token, savedPath);
     }
-  }, [searchParams]);
+  }, [searchParamsToken]);
 
   useEffect(() => {
     // Hide the initial animation after 5 seconds

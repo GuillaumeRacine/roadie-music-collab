@@ -7,10 +7,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  experimental: {
-    // Disable static optimization for pages with searchParams
-    missingSuspenseWithCSRBailout: false,
-  },
+  output: 'standalone',
 }
 
 export default nextConfig;
