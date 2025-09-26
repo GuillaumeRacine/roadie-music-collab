@@ -57,13 +57,37 @@ export async function ensureAccessToken(req: NextRequest): Promise<TokenResult |
   return null;
 }
 
-export function setAuthCookies(res: NextResponse, accessToken: string, refreshToken?: string, expiresInSec?: number) {
-  const exp = String(Date.now() + ((expiresInSec ?? 14400) * 1000));
-  res.cookies.set('roadie_token', accessToken, cookieOptions());
-  res.cookies.set('roadie_token_exp', exp, cookieOptions());
-  if (refreshToken) {
+export function getAuthFromCookies(req: NextRequest): { access_token: string; refresh_token?: string; expiry_time?: number } | null {
+  const cookies = req.cookies;
+  const access = cookies.get('roadie_token')?.value;
+  const refresh = cookies.get('roadie_refresh')?.value;
+  const expStr = cookies.get('roadie_token_exp')?.value;
+
+  if (!access) {
+    return null;
+  }
+
+  return {
+    access_token: access,
+    refresh_token: refresh,
+    expiry_time: expStr ? parseInt(expStr, 10) : undefined
+  };
+}
+
+export function setAuthCookies(
+  res: NextResponse,
+  tokens: {
+    access_token: string;
+    refresh_token?: string;
+    expiry_time?: number
+  }
+) {
+  const expiryTime = tokens.expiry_time || (Date.now() + 14400 * 1000);
+  res.cookies.set('roadie_token', tokens.access_token, cookieOptions());
+  res.cookies.set('roadie_token_exp', String(expiryTime), cookieOptions());
+  if (tokens.refresh_token) {
     // refresh lasts long; 30d
-    res.cookies.set('roadie_refresh', refreshToken, { ...cookieOptions(), maxAge: 60 * 60 * 24 * 30 });
+    res.cookies.set('roadie_refresh', tokens.refresh_token, { ...cookieOptions(), maxAge: 60 * 60 * 24 * 30 });
   }
 }
 

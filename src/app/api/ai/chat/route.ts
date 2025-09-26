@@ -44,10 +44,47 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401, headers: getCorsHeaders() });
     }
 
+    // Load robot settings
+    let robotSettings;
+    try {
+      const settingsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'}/api/ai/settings`, {
+        method: 'GET',
+      });
+      if (settingsResponse.ok) {
+        robotSettings = await settingsResponse.json();
+      } else {
+        // Use default settings if loading fails
+        robotSettings = {
+          systemPrompt: `You are an AI assistant specialized in music production and file management. You help musicians organize their files, write lyrics, and manage their creative projects.`,
+          roleDescription: "Music Production Assistant & File Manager",
+          temperature: 0.7,
+          maxTokens: 1000,
+          llmProvider: "OpenAI",
+          model: "gpt-4o-mini",
+          responseStyle: "concise_helpful",
+          contextInstructions: "Always consider the current folder structure and file types when providing advice."
+        };
+      }
+    } catch (error) {
+      console.warn('Failed to load robot settings, using defaults:', error);
+      robotSettings = {
+        systemPrompt: `You are an AI assistant specialized in music production and file management. You help musicians organize their files, write lyrics, and manage their creative projects.`,
+        roleDescription: "Music Production Assistant & File Manager",
+        temperature: 0.7,
+        maxTokens: 1000,
+        llmProvider: "OpenAI",
+        model: "gpt-4o-mini",
+        responseStyle: "concise_helpful",
+        contextInstructions: "Always consider the current folder structure and file types when providing advice."
+      };
+    }
+
     const fileContext = context as FileContext;
 
-    // Build system prompt with music production context
-    const systemPrompt = `You are an AI assistant specialized in music production and file management. You help musicians organize their files, write lyrics, and manage their creative projects.
+    // Build system prompt using robot settings
+    const systemPrompt = `${robotSettings.systemPrompt}
+
+Role: ${robotSettings.roleDescription}
 
 Current Context:
 - Location: ${fileContext.currentPath || 'Root directory'}
@@ -57,19 +94,14 @@ Current Context:
 - Folders: ${fileContext.folderStructure.join(', ')}
 
 Capabilities:
-1. File Organization: Help organize music files, create folder structures, rename files
-2. Lyrics Writing: Assist with songwriting, rhyme schemes, song structure, generate complete lyrics
-3. Music Production: Give advice on recording, mixing, collaboration
-4. Document Creation: Help create lyrics documents, song notes, collaboration docs
-5. Creative Assistance: Help with song concepts, themes, chord progressions, arrangement ideas
+${robotSettings.capabilities?.fileOrganization ? '- File Organization: Help organize music files, create folder structures, rename files' : ''}
+${robotSettings.capabilities?.lyricsWriting ? '- Lyrics Writing: Assist with songwriting, rhyme schemes, song structure, generate complete lyrics' : ''}
+${robotSettings.capabilities?.musicProduction ? '- Music Production: Give advice on recording, mixing, collaboration' : ''}
+${robotSettings.capabilities?.documentCreation ? '- Document Creation: Help create lyrics documents, song notes, collaboration docs' : ''}
 
-Guidelines:
-- Be concise but helpful
-- Focus on practical music production advice
-- Suggest specific file operations when relevant
-- Use music terminology appropriately
-- Be encouraging and creative
-- For lyrics requests, offer to create complete song lyrics
+Context Instructions: ${robotSettings.contextInstructions}
+
+Response Style: ${robotSettings.responseStyle}
 
 When suggesting file operations, format them as:
 [FILE_OP: operation_type:file_path1,file_path2]
@@ -81,15 +113,7 @@ Available operations:
 - CREATE_DOCUMENT: Create new text/lyrics files
 - CREATE_LYRICS: Generate complete song lyrics and save to Dropbox
 - ORGANIZE_BY_DATE: Auto-organize files by date
-- ORGANIZE_BY_TYPE: Auto-organize files by type
-
-For lyrics creation, you can suggest:
-"I can help you write complete song lyrics! Just tell me:
-- Song theme or concept
-- Musical style/genre
-- Mood/emotion
-- Any specific ideas or lines you have
-Then I'll create professional lyrics and save them to your Lyrics folder."`;
+- ORGANIZE_BY_TYPE: Auto-organize files by type`;
 
     // Prepare conversation history for OpenAI
     const messages: any[] = [
@@ -112,12 +136,17 @@ Then I'll create professional lyrics and save them to your Lyrics folder."`;
       content: message
     });
 
-    // Call OpenAI
+    // Validate OpenAI API key
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OpenAI API key is not configured');
+    }
+
+    // Call OpenAI with settings from robot configuration
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: robotSettings.model || 'gpt-4o-mini',
       messages,
-      max_tokens: 1000,
-      temperature: 0.7,
+      max_tokens: robotSettings.maxTokens || 1000,
+      temperature: robotSettings.temperature || 0.7,
     });
 
     const aiResponse = completion.choices[0]?.message?.content || "I'm sorry, I couldn't process your request.";

@@ -2,7 +2,9 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { apiUrl } from '@/lib/api';
-import AIChat from '@/components/ai-chat';
+import LyricsGenerator from '@/components/lyrics-generator';
+import AudioClustering from '@/components/audio-clustering';
+import TimelineCard from '@/components/timeline-card';
 
 // Force dynamic rendering for this page
 export const dynamic = 'force-dynamic';
@@ -27,10 +29,24 @@ function DashboardContent() {
   const [folderCache, setFolderCache] = useState<Map<string, {files: DropboxFile[], timestamp: number}>>(new Map());
   const [playingAudio, setPlayingAudio] = useState<{[filePath: string]: {url: string, isPlaying: boolean}}>({});
   const [audioElements, setAudioElements] = useState<{[filePath: string]: HTMLAudioElement}>({});
+  const [audioAnalysis, setAudioAnalysis] = useState<{[filePath: string]: {
+    bpm?: number;
+    key?: string;
+    mood?: string;
+    quality?: string;
+    suggestedName?: string;
+    isProcessing?: boolean;
+  }}>({});
+  const [showLyricsGenerator, setShowLyricsGenerator] = useState(false);
+  const [showAudioClustering, setShowAudioClustering] = useState(false);
+  const [renamingClusters, setRenamingClusters] = useState(false);
 
   // Bootstrap: restore cache and load default folder using cookie session
   useEffect(() => {
     restoreCache();
+    // Clear any cached data to ensure fresh folder listing
+    localStorage.removeItem('dropbox_folder_cache');
+    setFolderCache(new Map());
     const savedPath = localStorage.getItem('current_dropbox_path') || '/Music/Fiasco Total';
     loadFiles(savedPath);
   }, []);
@@ -100,12 +116,47 @@ function DashboardContent() {
     console.log('Cleared cache for:', path);
   };
 
+  const sortFiles = (files: DropboxFile[]): DropboxFile[] => {
+    return files.sort((a, b) => {
+      // If both are folders or both are files, sort by date
+      if (a['.tag'] === b['.tag']) {
+        // For date-based folders (YYYY.MM.DD format), sort by date
+        if (a['.tag'] === 'folder' && /^\d{4}\.\d{2}\.\d{2}$/.test(a.name) && /^\d{4}\.\d{2}\.\d{2}$/.test(b.name)) {
+          return b.name.localeCompare(a.name); // Newest first
+        }
+        // For other folders, sort alphabetically but with year folders first
+        if (a['.tag'] === 'folder') {
+          // Year folders (YYYY) should come first, then date folders
+          const aIsYear = /^\d{4}$/.test(a.name);
+          const bIsYear = /^\d{4}$/.test(b.name);
+          if (aIsYear && !bIsYear) return -1;
+          if (!aIsYear && bIsYear) return 1;
+          if (aIsYear && bIsYear) return b.name.localeCompare(a.name); // Newest year first
+          return b.name.localeCompare(a.name); // Alphabetical for other folders
+        }
+        // For files, sort by server_modified date if available, otherwise by name
+        if (a.server_modified && b.server_modified) {
+          return new Date(b.server_modified).getTime() - new Date(a.server_modified).getTime();
+        }
+        return b.name.localeCompare(a.name);
+      }
+      // Folders before files
+      return a['.tag'] === 'folder' ? -1 : 1;
+    });
+  };
+
   const loadFiles = async (path: string) => {
     // Check cache first
     const cachedFiles = getCachedData(path);
     if (cachedFiles) {
       console.log('Loading from cache:', path);
-      setFiles(cachedFiles);
+      // Filter out Archive folder
+      const filteredFiles = cachedFiles.filter(file =>
+        !file.name.toLowerCase().includes('archive') || file['.tag'] !== 'folder'
+      );
+      // Sort files: folders first (newest to oldest), then files (newest to oldest)
+      const sortedFiles = sortFiles(filteredFiles);
+      setFiles(sortedFiles);
       setCurrentPath(path);
       localStorage.setItem('current_dropbox_path', path);
       return;
@@ -115,18 +166,18 @@ function DashboardContent() {
       console.log('Loading files from path:', path);
       const response = await fetch(apiUrl(`/api/dropbox/files?path=${encodeURIComponent(path)}`), { credentials: 'include' });
       const data = await response.json();
-      
+
       if (!response.ok) {
         console.error('API Error:', data);
         console.error('Error details:', data.details);
-        
+
         // Check for expired token
         if (response.status === 401) {
           alert('Your Dropbox session is missing or expired. Please reconnect.');
           window.location.href = '/';
           return;
         }
-        
+
         if (data.error?.includes('path/not_found') || data.error?.includes('Folder not found')) {
           // If folder not found, try loading from root
           console.log('Folder not found, loading from root');
@@ -142,12 +193,20 @@ function DashboardContent() {
         }
         return;
       }
-      
+
       if (data.files) {
         console.log('Files loaded:', data.files);
-        setFiles(data.files);
+        // Filter out Archive folder
+        const filteredFiles = data.files.filter((file: DropboxFile) =>
+          !file.name.toLowerCase().includes('archive') || file['.tag'] !== 'folder'
+        );
+
+        // Sort files: folders first (newest to oldest), then files (newest to oldest)
+        const sortedFiles = sortFiles(filteredFiles);
+
+        setFiles(sortedFiles);
         setCurrentPath(path);
-        // Cache the loaded data
+        // Cache the loaded data (with Archive folders included for navigation purposes)
         setCachedData(path, data.files);
         // Save current path
         localStorage.setItem('current_dropbox_path', path);
@@ -238,6 +297,43 @@ function DashboardContent() {
       .finally(() => { window.location.href = '/'; });
   };
 
+  const handleRenameClusters = async () => {
+    setRenamingClusters(true);
+    try {
+      const response = await fetch(apiUrl('/api/dropbox/rename-clusters'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ folderPath: currentPath })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        let message = data.message;
+        if (data.summary) {
+          message += `\n\nRenamed: ${data.summary.renamed}`;
+          message += `\nNo change needed: ${data.summary.noChange}`;
+          if (data.summary.errors > 0) {
+            message += `\nErrors: ${data.summary.errors}`;
+          }
+        }
+
+        alert(message);
+
+        // Refresh the file listing to show new names
+        await loadFiles(currentPath);
+      } else {
+        alert(`Rename failed: ${data.error}`);
+      }
+    } catch (error) {
+      console.error('Rename error:', error);
+      alert('Failed to rename cluster folders');
+    } finally {
+      setRenamingClusters(false);
+    }
+  };
+
   const organizeFiles = async (action: string) => {
     setLoading(true);
     try {
@@ -294,6 +390,9 @@ function DashboardContent() {
     if (name.includes('guitar')) return '🎸';
     if (name.includes('bass')) return '🎸';
     if (name.includes('vocal')) return '🎤';
+    if (name.includes('idea')) return '💡';
+    if (name.includes('sheet') || name.includes('chart')) return '🎼';
+    if (name.includes('media') || name.includes('photo')) return '📷';
     return '📁'; // default folder icon
   };
 
@@ -406,6 +505,233 @@ function DashboardContent() {
     }
   };
 
+  // Audio analysis function
+  const processAudioFile = async (file: DropboxFile) => {
+    const filePath = file.path_display;
+    
+    // Set processing state
+    setAudioAnalysis(prev => ({
+      ...prev,
+      [filePath]: { ...prev[filePath], isProcessing: true }
+    }));
+
+    try {
+      const response = await fetch(apiUrl('/api/audio-analysis'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ filePath }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        const analysis = data.analysis;
+        setAudioAnalysis(prev => ({
+          ...prev,
+          [filePath]: {
+            bpm: analysis.audioAnalysis?.bpm,
+            key: analysis.audioAnalysis?.key,
+            mood: analysis.audioAnalysis?.mood,
+            quality: analysis.aiAnalysis?.musicalContent?.recordingQuality,
+            suggestedName: analysis.aiAnalysis?.suggestions?.suggestedName,
+            isProcessing: false
+          }
+        }));
+      } else {
+        console.error('Analysis failed:', data.error);
+        setAudioAnalysis(prev => ({
+          ...prev,
+          [filePath]: { ...prev[filePath], isProcessing: false }
+        }));
+      }
+    } catch (error) {
+      console.error('Analysis error:', error);
+      setAudioAnalysis(prev => ({
+        ...prev,
+        [filePath]: { ...prev[filePath], isProcessing: false }
+      }));
+    }
+  };
+
+  const processNewUploads = async (action: 'preview' | 'process') => {
+    setLoading(true);
+    try {
+      const response = await fetch(apiUrl('/api/dropbox/process-uploads'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ action }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        if (action === 'preview') {
+          // Show detailed preview results
+          let previewMessage = `Preview: ${result.total} files found\n\n`;
+
+          const categories: {[key: string]: number} = {};
+          const dateSources: {[key: string]: number} = {};
+
+          result.results.forEach((r: any) => {
+            if (r.status !== 'skipped') {
+              categories[r.category] = (categories[r.category] || 0) + 1;
+              dateSources[r.dateSource] = (dateSources[r.dateSource] || 0) + 1;
+            }
+          });
+
+          previewMessage += '📁 Destination folders:\n';
+          for (const [category, count] of Object.entries(categories)) {
+            previewMessage += `  • ${category.replace('-', ' ').toUpperCase()}: ${count} files\n`;
+          }
+
+          previewMessage += '\n📅 Date detection:\n';
+          for (const [source, count] of Object.entries(dateSources)) {
+            const sourceLabel = {
+              'filename-prefix': 'From filename prefix (YYYYMMDD_)',
+              'filename-embedded': 'From embedded date (YYYY-MM-DD)',
+              'filename-us-format': 'From US date format (MM/DD/YYYY)',
+              'dropbox-upload': 'From Dropbox upload date',
+              'processing-date': 'From processing date (fallback)',
+              'already-has-date': 'Already has date prefix',
+              'original-preserved': 'Original filename preserved'
+            }[source] || source;
+            previewMessage += `  • ${sourceLabel}: ${count} files\n`;
+          }
+
+          if (result.skipped > 0) {
+            previewMessage += `\n⚠️ ${result.skipped} files will be skipped (unknown types)\n`;
+          }
+
+          if (confirm(previewMessage + '\nProceed with processing?')) {
+            processNewUploads('process');
+          }
+        } else {
+          let successMessage = `Success: ${result.message}`;
+
+          if (result.results.length > 0) {
+            const errors = result.results.filter((r: any) => r.status === 'error');
+            if (errors.length > 0) {
+              successMessage += `\n\n⚠️ ${errors.length} files failed:\n`;
+              errors.slice(0, 3).forEach((error: any) => {
+                successMessage += `• ${error.fileName}: ${error.message}\n`;
+              });
+              if (errors.length > 3) {
+                successMessage += `• ... and ${errors.length - 3} more\n`;
+              }
+            }
+          }
+
+          alert(successMessage);
+          // Clear cache for New Uploads and reload
+          clearCacheForPath(currentPath);
+          loadFiles(currentPath);
+        }
+      } else {
+        alert(`Error: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Error processing uploads:', error);
+      alert('Failed to process uploads');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const restoreFiles = async (action: 'restore') => {
+    setLoading(true);
+    try {
+      const response = await fetch(apiUrl('/api/dropbox/restore-uploads'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ action }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert(`${result.message}\n\nRestored: ${result.restored} files\nErrors: ${result.errors}\nSkipped: ${result.skipped}`);
+        // Clear cache and reload
+        clearCacheForPath(currentPath);
+        loadFiles(currentPath);
+      } else {
+        alert(`Error: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Error restoring files:', error);
+      alert('Failed to restore files');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const organizeLiveRecordings = async (action: 'preview' | 'organize') => {
+    setLoading(true);
+    try {
+      const response = await fetch(apiUrl('/api/dropbox/organize-live-recordings'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ action }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        if (action === 'preview') {
+          let previewMessage = `Preview: ${result.totalFiles} audio files found\n\n`;
+          previewMessage += `📁 Will create ${result.dateGroups} date folders\n`;
+          previewMessage += `📄 ${result.organized} files will be organized\n`;
+          previewMessage += `⚠️ ${result.skipped} files will be skipped\n`;
+
+          if (result.foldersCreated > 0) {
+            previewMessage += `🆕 ${result.foldersCreated} new folders will be created\n`;
+          }
+
+          if (confirm(previewMessage + '\nProceed with organizing?')) {
+            organizeLiveRecordings('organize');
+          }
+        } else {
+          let successMessage = `Success: ${result.message}`;
+          if (result.results.length > 0) {
+            const errors = result.results.filter((r: any) => r.status === 'error');
+            if (errors.length > 0) {
+              successMessage += `\n\n⚠️ ${errors.length} files failed:\n`;
+              errors.slice(0, 3).forEach((error: any) => {
+                successMessage += `• ${error.fileName}: ${error.message}\n`;
+              });
+              if (errors.length > 3) {
+                successMessage += `• ... and ${errors.length - 3} more\n`;
+              }
+            }
+          }
+
+          alert(successMessage);
+          // Clear cache and reload
+          clearCacheForPath(currentPath);
+          loadFiles(currentPath);
+        }
+      } else {
+        alert(`Error: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Error organizing live recordings:', error);
+      alert('Failed to organize live recordings');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleInlineAudioPlay = async (file: DropboxFile) => {
     
     const filePath = file.path_display;
@@ -500,28 +826,191 @@ function DashboardContent() {
         <div className="mb-4 flex justify-between items-center border-b-2 border-cyan-400 pb-2 bg-black/40 backdrop-blur-sm rounded-lg px-4 py-2">
           <div>
             <h1 className="text-xl font-bold text-white mb-1 drop-shadow-lg">♪ ROADIE v1.0</h1>
-            <p className="text-sm text-cyan-300">
-              &gt; {currentPath || '/'}
-            </p>
+            <div className="text-sm text-cyan-300 flex items-center space-x-1">
+              <span>&gt;</span>
+              <button
+                onClick={() => loadFiles('')}
+                className="hover:text-white hover:underline transition-colors"
+                title="Go to root"
+              >
+                /
+              </button>
+              {currentPath && currentPath.split('/').filter(Boolean).map((folder, index, array) => {
+                const pathUpToHere = '/' + array.slice(0, index + 1).join('/');
+                const isLast = index === array.length - 1;
+                return (
+                  <span key={index} className="flex items-center">
+                    <span className="mx-1 text-cyan-500">/</span>
+                    <button
+                      onClick={() => !isLast && loadFiles(pathUpToHere)}
+                      className={isLast ? 'text-white font-bold' : 'hover:text-white hover:underline transition-colors cursor-pointer'}
+                      disabled={isLast}
+                      title={isLast ? 'Current folder' : `Go to ${folder}`}
+                    >
+                      {folder}
+                    </button>
+                  </span>
+                );
+              })}
+            </div>
           </div>
           <div className="flex space-x-2">
+            <button
+              onClick={() => loadFiles('/Music/Fiasco Total')}
+              className="px-3 py-1 text-xs bg-green-600 hover:bg-green-500 text-white border border-green-400 font-bold rounded shadow-lg hover:shadow-green-500/50 transition-all"
+              title="Go to home folder"
+            >
+              🏠
+            </button>
+            <button
+              onClick={() => setShowLyricsGenerator(true)}
+              className="px-3 py-1 text-xs bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white border border-pink-400 font-bold rounded shadow-lg hover:shadow-pink-500/50 transition-all"
+              title="Generate song lyrics"
+            >
+              📝
+            </button>
             {currentPath && (
-              <button 
+              <button
                 onClick={goBack}
                 className="px-3 py-1 text-xs bg-cyan-600 hover:bg-cyan-500 text-white border border-cyan-400 font-bold rounded shadow-lg hover:shadow-cyan-500/50 transition-all"
               >
-                [BACK]
+                ⬅
               </button>
             )}
-            <button 
-              onClick={handleLogout} 
+            <button
+              onClick={handleLogout}
               className="px-3 py-1 text-xs bg-pink-600 hover:bg-pink-500 text-white border border-pink-400 font-bold rounded shadow-lg hover:shadow-pink-500/50 transition-all"
             >
-              [LOGOUT]
+              🚪
             </button>
           </div>
         </div>
 
+        {/* Activity Timeline Card */}
+        <TimelineCard className="mb-4" />
+
+        {/* Process New Uploads Button - Show only when in New Uploads folder */}
+        {currentPath.toLowerCase().includes('new uploads') && files.length > 0 && (
+          <div className="mb-4 bg-black/60 backdrop-blur-sm border border-yellow-500/50 rounded-lg p-4 shadow-lg shadow-yellow-500/20">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-yellow-400 font-bold mb-1 drop-shadow-lg">📤 PROCESS NEW UPLOADS</h3>
+                <p className="text-xs text-cyan-200">
+                  Smart organize {files.filter(f => f['.tag'] === 'file').length} files with intelligent date detection
+                </p>
+                <p className="text-xs text-gray-400 mt-1">
+                  • Preserves existing dates • Uses file creation dates • Falls back to upload date
+                </p>
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => processNewUploads('preview')}
+                  className="px-3 py-1 text-xs bg-blue-600 hover:bg-blue-500 text-white border border-blue-400 font-bold rounded shadow-lg hover:shadow-blue-500/50 transition-all"
+                >
+                  [PREVIEW]
+                </button>
+                <button
+                  onClick={() => processNewUploads('process')}
+                  className="px-3 py-1 text-xs bg-green-600 hover:bg-green-500 text-white border border-green-400 font-bold rounded shadow-lg hover:shadow-green-500/50 transition-all"
+                >
+                  [PROCESS ALL]
+                </button>
+                <button
+                  onClick={() => restoreFiles('restore')}
+                  className="px-3 py-1 text-xs bg-orange-600 hover:bg-orange-500 text-white border border-orange-400 font-bold rounded shadow-lg hover:shadow-orange-500/50 transition-all"
+                >
+                  [RESTORE]
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Organize Live Recordings Button - Show only when in Live Recordings/2025 folder */}
+        {currentPath.toLowerCase().includes('live recordings') && currentPath.includes('2025') && files.some(f => f['.tag'] === 'file' && isAudioFile(f.name)) && (
+          <div className="mb-4 bg-black/60 backdrop-blur-sm border border-green-500/50 rounded-lg p-4 shadow-lg shadow-green-500/20">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-green-400 font-bold mb-1 drop-shadow-lg">🎤 ORGANIZE LIVE RECORDINGS</h3>
+                <p className="text-xs text-cyan-200">
+                  Group {files.filter(f => f['.tag'] === 'file' && isAudioFile(f.name)).length} audio files into date-based folders
+                </p>
+                <p className="text-xs text-gray-400 mt-1">
+                  • Extracts dates from filenames • Creates date folders • Groups recordings by date
+                </p>
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => organizeLiveRecordings('preview')}
+                  className="px-3 py-1 text-xs bg-blue-600 hover:bg-blue-500 text-white border border-blue-400 font-bold rounded shadow-lg hover:shadow-blue-500/50 transition-all"
+                >
+                  [PREVIEW]
+                </button>
+                <button
+                  onClick={() => organizeLiveRecordings('organize')}
+                  className="px-3 py-1 text-xs bg-green-600 hover:bg-green-500 text-white border border-green-400 font-bold rounded shadow-lg hover:shadow-green-500/50 transition-all"
+                >
+                  [ORGANIZE]
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Audio Clustering Button - Show when there are multiple audio files */}
+        {files.filter(f => f['.tag'] === 'file' && isAudioFile(f.name)).length >= 2 && (
+          <div className="mb-4 bg-black/60 backdrop-blur-sm border border-cyan-500/50 rounded-lg p-4 shadow-lg shadow-cyan-500/20">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-cyan-400 font-bold mb-1 drop-shadow-lg">🎵 CLUSTER AUDIO FILES</h3>
+                <p className="text-xs text-cyan-200">
+                  Find similar recordings from {files.filter(f => f['.tag'] === 'file' && isAudioFile(f.name)).length} audio files
+                </p>
+                <p className="text-xs text-gray-400 mt-1">
+                  • Groups different takes of same song • Identifies musical variations • Organizes by similarity
+                </p>
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => setShowAudioClustering(true)}
+                  className="px-3 py-1 text-xs bg-cyan-600 hover:bg-cyan-500 text-white border border-cyan-400 font-bold rounded shadow-lg hover:shadow-cyan-500/50 transition-all"
+                >
+                  [ANALYZE CLUSTERS]
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Rename Cluster Folders Button - Show when there are cluster folders */}
+        {files.filter(f => f['.tag'] === 'folder' && f.name.startsWith('cluster_')).length > 0 && (
+          <div className="mb-4 bg-black/60 backdrop-blur-sm border border-purple-500/50 rounded-lg p-4 shadow-lg shadow-purple-500/20">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-purple-400 font-bold mb-1 drop-shadow-lg">🔄 RENAME CLUSTER FOLDERS</h3>
+                <p className="text-xs text-cyan-200">
+                  Update {files.filter(f => f['.tag'] === 'folder' && f.name.startsWith('cluster_')).length} cluster folders to use date + song name format
+                </p>
+                <p className="text-xs text-gray-400 mt-1">
+                  • Analyzes folder contents • Extracts song titles • Uses YYYYMMDD_Song_Name format
+                </p>
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  onClick={handleRenameClusters}
+                  disabled={renamingClusters}
+                  className={`px-3 py-1 text-xs rounded border font-bold transition-all ${
+                    renamingClusters
+                      ? 'bg-gray-600 text-gray-300 border-gray-500 cursor-not-allowed'
+                      : 'bg-purple-600 hover:bg-purple-500 text-white border-purple-400 shadow-lg hover:shadow-purple-500/50'
+                  }`}
+                >
+                  {renamingClusters ? '[RENAMING...]' : '[RENAME CLUSTERS]'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {loading ? (
           <div className="text-center text-yellow-300 animate-pulse">&gt;&gt;&gt; LOADING FILES...</div>
@@ -585,9 +1074,76 @@ function DashboardContent() {
                           {playingAudio[file.path_display]?.isPlaying ? 'STOP' : 'LISTEN'}
                         </span>
                       </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          processAudioFile(file);
+                        }}
+                        disabled={audioAnalysis[file.path_display]?.isProcessing}
+                        className={`px-2 py-1 text-xs rounded border transition-all duration-200 flex items-center space-x-1 ${
+                          audioAnalysis[file.path_display]?.isProcessing
+                            ? 'bg-gray-600 text-gray-300 border-gray-500 cursor-not-allowed'
+                            : audioAnalysis[file.path_display]?.bpm
+                              ? 'bg-green-600 hover:bg-green-500 text-white border-green-400 shadow-lg shadow-green-500/30'
+                              : 'bg-purple-600 hover:bg-purple-500 text-white border-purple-400 shadow-lg hover:shadow-purple-500/30'
+                        }`}
+                        title={audioAnalysis[file.path_display]?.isProcessing ? 'Processing...' : audioAnalysis[file.path_display]?.bpm ? 'Re-analyze' : 'Analyze Audio'}
+                      >
+                        <span>
+                          {audioAnalysis[file.path_display]?.isProcessing ? '⚙️' : 
+                           audioAnalysis[file.path_display]?.bpm ? '✅' : '🎤'}
+                        </span>
+                        <span className="font-bold">
+                          {audioAnalysis[file.path_display]?.isProcessing ? 'PROCESSING' : 
+                           audioAnalysis[file.path_display]?.bpm ? 'ANALYZED' : 'PROCESS'}
+                        </span>
+                      </button>
                     </div>
                   )}
                 </div>
+                
+                {/* Audio analysis results */}
+                {isAudioFile(file.name) && audioAnalysis[file.path_display] && !audioAnalysis[file.path_display].isProcessing && audioAnalysis[file.path_display].bpm && (
+                  <div className="px-3 pb-3">
+                    <div className="bg-black/40 border border-green-500/20 rounded-lg p-3 mt-2">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                        <div className="text-center">
+                          <div className="text-green-400 font-bold">{audioAnalysis[file.path_display].bpm} BPM</div>
+                          <div className="text-gray-400">Tempo</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-purple-400 font-bold">{audioAnalysis[file.path_display].key || 'Unknown'}</div>
+                          <div className="text-gray-400">Key</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-yellow-400 font-bold capitalize">{audioAnalysis[file.path_display].mood || 'Unknown'}</div>
+                          <div className="text-gray-400">Mood</div>
+                        </div>
+                        <div className="text-center">
+                          <div className={`font-bold ${
+                            audioAnalysis[file.path_display].quality === 'High-Quality' ? 'text-green-400' :
+                            audioAnalysis[file.path_display].quality === 'Professional' ? 'text-blue-400' :
+                            audioAnalysis[file.path_display].quality === 'Demo' ? 'text-yellow-400' :
+                            'text-gray-400'
+                          }`}>
+                            {audioAnalysis[file.path_display].quality || 'Unknown'}
+                          </div>
+                          <div className="text-gray-400">Quality</div>
+                        </div>
+                      </div>
+                      
+                      {audioAnalysis[file.path_display].suggestedName && (
+                        <div className="mt-3 pt-2 border-t border-green-500/20">
+                          <div className="text-xs text-gray-400">AI Suggested Name:</div>
+                          <div className="text-green-300 font-medium text-sm mt-1">
+                            {audioAnalysis[file.path_display].suggestedName}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
             
@@ -660,12 +1216,22 @@ function DashboardContent() {
           </div>
         )}
 
-        {/* AI Chat Assistant */}
-        <AIChat 
-          currentPath={currentPath} 
-          files={files} 
-          onFileOperation={handleFileOperation}
-        />
+        {/* Lyrics Generator Modal */}
+        {showLyricsGenerator && (
+          <LyricsGenerator onClose={() => setShowLyricsGenerator(false)} />
+        )}
+
+        {/* Audio Clustering Modal */}
+        {showAudioClustering && (
+          <AudioClustering
+            currentPath={currentPath}
+            onClose={() => setShowAudioClustering(false)}
+            onOrganizeComplete={() => {
+              clearCacheForPath(currentPath);
+              loadFiles(currentPath);
+            }}
+          />
+        )}
 
       </div>
     </div>

@@ -11,15 +11,26 @@ export class DropboxService {
   private clientId: string;
   private clientSecret: string;
 
-  constructor(config: DropboxConfig) {
-    this.clientId = config.clientId;
-    this.clientSecret = config.clientSecret;
-    this.dbx = new Dropbox({
-      clientId: config.clientId,
-      clientSecret: config.clientSecret,
-      accessToken: config.accessToken,
-      fetch: fetch
-    });
+  constructor(accessTokenOrConfig: string | DropboxConfig) {
+    if (typeof accessTokenOrConfig === 'string') {
+      // Simple constructor with just access token
+      this.clientId = process.env.DROPBOX_CLIENT_ID!;
+      this.clientSecret = process.env.DROPBOX_CLIENT_SECRET!;
+      this.dbx = new Dropbox({
+        accessToken: accessTokenOrConfig,
+        fetch: fetch as any
+      });
+    } else {
+      // Full config constructor
+      this.clientId = accessTokenOrConfig.clientId;
+      this.clientSecret = accessTokenOrConfig.clientSecret;
+      this.dbx = new Dropbox({
+        clientId: accessTokenOrConfig.clientId,
+        clientSecret: accessTokenOrConfig.clientSecret,
+        accessToken: accessTokenOrConfig.accessToken,
+        fetch: fetch as any
+      });
+    }
   }
 
   async getAuthUrl(redirectUri: string) {
@@ -77,11 +88,11 @@ export class DropboxService {
     }
   }
 
-  async uploadFile(file: File, path: string) {
+  async uploadFile(path: string, contents: Buffer | File) {
     try {
       const response = await this.dbx.filesUpload({
         path,
-        contents: file,
+        contents,
         mode: 'add',
         autorename: true
       });
@@ -91,13 +102,42 @@ export class DropboxService {
     }
   }
 
-  async downloadFile(path: string) {
+  async downloadFile(path: string): Promise<Buffer> {
     try {
       const response = await this.dbx.filesDownload({ path });
-      return response.result;
+      const result = response.result as any;
+      // Convert fileBinary to Buffer
+      if (result.fileBinary) {
+        return Buffer.from(result.fileBinary);
+      }
+      throw new Error('No file content received');
     } catch (error) {
       throw new Error(`Failed to download file: ${error}`);
     }
+  }
+
+  async getFileMetadata(path: string) {
+    try {
+      const response = await this.dbx.filesGetMetadata({ path });
+      return response.result;
+    } catch (error) {
+      throw new Error(`Failed to get file metadata: ${error}`);
+    }
+  }
+
+  async getTemporaryLink(path: string): Promise<string> {
+    try {
+      const response = await this.dbx.filesGetTemporaryLink({ path });
+      return response.result.link;
+    } catch (error) {
+      throw new Error(`Failed to get temporary link: ${error}`);
+    }
+  }
+
+  async moveToUploadsFolder() {
+    // Placeholder for moving files to uploads folder
+    // Implementation would depend on specific requirements
+    throw new Error('moveToUploadsFolder not implemented');
   }
 
   async createFolder(path: string) {
@@ -115,15 +155,6 @@ export class DropboxService {
       return response.result;
     } catch (error) {
       throw new Error(`Failed to delete file: ${error}`);
-    }
-  }
-
-  async getFileMetadata(path: string) {
-    try {
-      const response = await this.dbx.filesGetMetadata({ path });
-      return response.result;
-    } catch (error) {
-      throw new Error(`Failed to get file metadata: ${error}`);
     }
   }
 

@@ -1,58 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DropboxService } from '@/lib/dropbox';
 import { getCorsHeaders } from '@/lib/config';
-import { ensureAccessToken } from '@/lib/session';
+import { getAuthFromCookies } from '@/lib/session';
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const accessTokenFromQuery = searchParams.get('token');
-  const path = searchParams.get('path');
-
-  console.log('Preview request:', { path, hasToken: !!accessToken });
-
-  // Cookies first, fallback to query
-  const ensured = await ensureAccessToken(request);
-  const accessToken = ensured?.accessToken || accessTokenFromQuery;
-  if (!accessToken || !path) {
-    console.error('Missing required parameters:', { hasToken: !!accessToken, hasPath: !!path });
-    return NextResponse.json({ error: 'Missing token or path' }, { status: 400 });
-  }
-
   try {
-    const dropboxService = new DropboxService({
-      clientId: process.env.DROPBOX_CLIENT_ID!,
-      clientSecret: process.env.DROPBOX_CLIENT_SECRET!,
-      accessToken
-    });
+    const authTokens = getAuthFromCookies(request);
+    if (!authTokens?.access_token) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401, headers: getCorsHeaders() });
+    }
 
-    console.log('Getting direct preview link for:', path);
-    
-    // Try to get a temporary link first (works for all file types)
-    let directUrl;
-    try {
-      directUrl = await dropboxService.getDirectPreviewLink(path);
-      console.log('Got temporary link:', directUrl);
-    } catch (tempError) {
-      console.log('Temporary link failed, trying shared link:', tempError.message);
-      // Fallback to shared link
-      directUrl = await dropboxService.getSharedLink(path);
-      console.log('Got shared link:', directUrl);
+    const searchParams = request.nextUrl.searchParams;
+    const path = searchParams.get('path');
+
+    if (!path) {
+      return NextResponse.json({ error: 'Path is required' }, { status: 400, headers: getCorsHeaders() });
     }
-    
-    const res = NextResponse.json({ previewUrl: directUrl, path }, { headers: getCorsHeaders() });
-    if (ensured?.cookiesToSet) {
-      for (const c of ensured.cookiesToSet) res.cookies.set(c.name, c.value, c.options);
-    }
-    return res;
+
+    const dropboxService = new DropboxService(authTokens.access_token);
+    const previewUrl = await dropboxService.getTemporaryLink(path);
+
+    return NextResponse.json({ previewUrl }, { headers: getCorsHeaders() });
   } catch (error: any) {
-    console.error('Error getting preview link:', error);
-    console.error('Error details:', {
-      message: error.message,
-      stack: error.stack,
-      name: error.name
-    });
+    console.error('Error getting preview:', error);
     return NextResponse.json(
-      { error: 'Failed to get preview link', details: error.message },
+      { error: error.message || 'Failed to get preview URL' },
       { status: 500, headers: getCorsHeaders() }
     );
   }

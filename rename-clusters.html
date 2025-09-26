@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rename Cluster Folders</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #1a1a1a;
+            color: #00ffff;
+            padding: 20px;
+        }
+        button {
+            background: #006666;
+            color: white;
+            border: 1px solid #00ffff;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        button:hover { background: #008888; }
+        #results {
+            background: #000;
+            border: 1px solid #00ffff;
+            padding: 10px;
+            margin: 10px 0;
+            min-height: 200px;
+        }
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        .info { color: #ffff00; }
+    </style>
+</head>
+<body>
+    <h1>🎵 Rename Cluster Folders</h1>
+    <p>This will rename cluster folders in: /Music/Fiasco Total/Live Recordings/2025/2025.09.22</p>
+
+    <button onclick="renameClusterFolders()">🔄 RENAME CLUSTER FOLDERS</button>
+
+    <div id="results">Click the button above to start renaming...</div>
+
+    <script>
+        async function renameClusterFolders() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '🔄 Processing cluster folders...';
+
+            try {
+                const response = await fetch('http://localhost:3001/api/dropbox/rename-clusters', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        folderPath: '/Music/Fiasco Total/Live Recordings/2025/2025.09.22'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    let html = '<h3>📋 Rename Results:</h3>';
+
+                    if (data.results && data.results.length > 0) {
+                        data.results.forEach(result => {
+                            if (result.status === 'success') {
+                                html += `<div class="success">✅ Renamed: ${result.oldName} → ${result.newName}</div>`;
+                            } else if (result.status === 'error') {
+                                html += `<div class="error">❌ Error: ${result.oldName} - ${result.error}</div>`;
+                            } else {
+                                html += `<div class="info">ℹ️  No change needed: ${result.oldName}</div>`;
+                            }
+                        });
+
+                        if (data.summary) {
+                            html += '<br><h4>📊 Summary:</h4>';
+                            html += `<div>Total folders: ${data.summary.total}</div>`;
+                            html += `<div class="success">Renamed: ${data.summary.renamed}</div>`;
+                            html += `<div class="info">No change needed: ${data.summary.noChange}</div>`;
+                            html += `<div class="error">Errors: ${data.summary.errors}</div>`;
+                        }
+                    } else {
+                        html += '<div class="info">No cluster folders found to rename.</div>';
+                    }
+
+                    resultsDiv.innerHTML = html;
+                } else {
+                    resultsDiv.innerHTML = `<div class="error">❌ Error: ${data.error}</div>`;
+                }
+
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error">❌ Network error: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { apiUrl } from '@/lib/api';
 
 interface Message {
@@ -27,18 +28,12 @@ interface AIChatProps {
 }
 
 export default function AIChat({ currentPath, files, onFileOperation }: AIChatProps) {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      role: 'assistant',
-      content: "Hi! I'm your music AI assistant. I can help you organize your files, write lyrics, create documents, and manage your music projects. What would you like to do?",
-      timestamp: new Date()
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -150,98 +145,87 @@ export default function AIChat({ currentPath, files, onFileOperation }: AIChatPr
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
-      {/* Chat Toggle Button */}
-      {!isExpanded && (
-        <button
-          onClick={() => setIsExpanded(true)}
-          className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white p-4 rounded-full shadow-lg hover:shadow-purple-500/50 transition-all duration-300 border border-purple-400"
-          title="Open AI Assistant"
-        >
-          <span className="text-2xl">🤖</span>
-        </button>
-      )}
-
-      {/* Chat Panel */}
-      {isExpanded && (
-        <div className="bg-black/95 border border-cyan-500/50 rounded-lg shadow-2xl shadow-cyan-500/20 backdrop-blur-sm w-96 h-[500px] flex flex-col">
-          {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-cyan-500/30">
-            <div className="flex items-center space-x-2">
-              <span className="text-2xl">🤖</span>
-              <div>
-                <h3 className="text-white font-bold text-sm">AI Music Assistant</h3>
-                <p className="text-cyan-400 text-xs">Ready to help with your music</p>
-              </div>
-            </div>
-            <button
-              onClick={() => setIsExpanded(false)}
-              className="text-cyan-400 hover:text-white transition-colors"
-            >
-              ✕
-            </button>
-          </div>
-
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+    <div className="mb-6">
+      {/* Inline Chat Panel */}
+      <div className="bg-black/60 border border-cyan-500/30 rounded-lg shadow-lg shadow-cyan-500/20 backdrop-blur-sm">
+        {/* Header */}
+        <div className="flex items-center justify-between p-3 border-b border-cyan-500/30">
+          <div className="flex items-center space-x-2">
+            <div>
+              <button 
+                onClick={() => router.push('/robot-settings')}
+                className="text-white font-bold text-sm hover:text-cyan-300 transition-colors cursor-pointer"
               >
-                <div
-                  className={`max-w-[80%] p-3 rounded-lg text-sm ${
-                    message.role === 'user'
-                      ? 'bg-cyan-600 text-white'
-                      : 'bg-gray-800 text-cyan-200 border border-cyan-500/30'
-                  }`}
-                >
-                  <p className="whitespace-pre-wrap">{message.content}</p>
-                  <p className="text-xs opacity-70 mt-1">
-                    {formatTime(message.timestamp)}
-                  </p>
-                </div>
-              </div>
-            ))}
-            {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-gray-800 text-cyan-200 border border-cyan-500/30 p-3 rounded-lg text-sm">
-                  <div className="flex items-center space-x-2">
-                    <div className="animate-spin w-4 h-4 border-2 border-cyan-400 border-t-transparent rounded-full"></div>
-                    <span>Thinking...</span>
-                  </div>
-                </div>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input */}
-          <div className="p-4 border-t border-cyan-500/30">
-            <div className="flex space-x-2">
-              <textarea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Ask me about your music files, lyrics, or organization..."
-                className="flex-1 bg-gray-900 text-white border border-cyan-500/30 rounded px-3 py-2 text-sm resize-none focus:outline-none focus:border-cyan-400 min-h-[40px]"
-                rows={1}
-                disabled={isLoading}
-              />
-              <button
-                onClick={sendMessage}
-                disabled={isLoading || !input.trim()}
-                className="bg-cyan-600 hover:bg-cyan-500 disabled:bg-gray-700 disabled:text-gray-400 text-white px-4 py-2 rounded transition-colors text-sm font-medium"
-              >
-                Send
+                Roadie Robot 🤖
               </button>
             </div>
-            <p className="text-xs text-gray-400 mt-2">
-              Current folder: {currentPath || '/'} ({files.length} items)
-            </p>
           </div>
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="text-cyan-400 hover:text-white transition-colors text-sm px-2 py-1 rounded border border-cyan-500/30 hover:border-cyan-400"
+          >
+            {isExpanded ? '▼ Hide' : '▶ Show'}
+          </button>
         </div>
-      )}
+
+        {/* Collapsible Content */}
+        {isExpanded && (
+          <>
+            {/* Messages */}
+            <div className="max-h-64 overflow-y-auto p-3 space-y-2 border-b border-cyan-500/30">
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`max-w-[85%] p-2 rounded text-sm ${
+                      message.role === 'user'
+                        ? 'bg-cyan-600/80 text-white'
+                        : 'bg-gray-800/80 text-cyan-200 border border-cyan-500/20'
+                    }`}
+                  >
+                    <p className="whitespace-pre-wrap text-xs leading-relaxed">{message.content}</p>
+                  </div>
+                </div>
+              ))}
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div className="bg-gray-800/80 text-cyan-200 border border-cyan-500/20 p-2 rounded text-sm">
+                    <div className="flex items-center space-x-2">
+                      <div className="animate-spin w-3 h-3 border-2 border-cyan-400 border-t-transparent rounded-full"></div>
+                      <span className="text-xs">Thinking...</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input */}
+            <div className="p-3">
+              <div className="flex space-x-2">
+                <textarea
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Ask me to organize files, write lyrics, or help with your music..."
+                  className="flex-1 bg-gray-900/50 text-white border border-cyan-500/30 rounded px-3 py-2 text-sm resize-none focus:outline-none focus:border-cyan-400 min-h-[36px] placeholder:text-gray-500"
+                  rows={1}
+                  disabled={isLoading}
+                />
+                <button
+                  onClick={sendMessage}
+                  disabled={isLoading || !input.trim()}
+                  className="bg-cyan-600 hover:bg-cyan-500 disabled:bg-gray-700 disabled:text-gray-500 text-white px-3 py-2 rounded transition-colors text-xs font-medium border border-cyan-500/30"
+                >
+                  {isLoading ? '...' : 'Send'}
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }

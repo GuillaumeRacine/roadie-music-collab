@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dropbox OAuth Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #00ff00;
+        }
+        button {
+            background: #0061fe;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .log {
+            background: #000;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #00ff00;
+            white-space: pre-wrap;
+        }
+        .error {
+            color: #ff0000;
+        }
+        .success {
+            color: #00ff00;
+        }
+        .info {
+            color: #ffff00;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dropbox OAuth Flow Tester</h1>
+
+    <div>
+        <button onclick="testBackendAPI()">1. Test Backend API</button>
+        <button onclick="testOAuthFlow()">2. Test Full OAuth Flow</button>
+        <button onclick="openOAuthDirectly()">3. Open OAuth URL Directly</button>
+    </div>
+
+    <div id="logs"></div>
+
+    <script>
+        function log(message, type = 'info') {
+            const logsDiv = document.getElementById('logs');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log ${type}`;
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logsDiv.appendChild(logEntry);
+            console.log(message);
+        }
+
+        async function testBackendAPI() {
+            log('Testing backend API at http://localhost:3001/api/dropbox/auth', 'info');
+
+            try {
+                const response = await fetch('http://localhost:3001/api/dropbox/auth', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                log(`Response status: ${response.status}`, response.ok ? 'success' : 'error');
+
+                const data = await response.json();
+                log(`Response data: ${JSON.stringify(data, null, 2)}`, 'info');
+
+                if (data.authUrl) {
+                    log(`Auth URL generated: ${data.authUrl}`, 'success');
+
+                    // Parse the URL to check components
+                    const url = new URL(data.authUrl);
+                    log(`Client ID: ${url.searchParams.get('client_id')}`, 'info');
+                    log(`Redirect URI: ${url.searchParams.get('redirect_uri')}`, 'info');
+                    log(`Response Type: ${url.searchParams.get('response_type')}`, 'info');
+                    log(`Token Access Type: ${url.searchParams.get('token_access_type')}`, 'info');
+                } else {
+                    log('No auth URL in response', 'error');
+                }
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testOAuthFlow() {
+            log('Starting full OAuth flow test', 'info');
+
+            try {
+                // First get the auth URL
+                const response = await fetch('http://localhost:3001/api/dropbox/auth', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.authUrl) {
+                    log(`Opening OAuth URL in new window...`, 'info');
+                    log(`URL: ${data.authUrl}`, 'info');
+
+                    // Open in a popup to monitor the flow
+                    const popup = window.open(data.authUrl, 'oauth', 'width=600,height=700');
+
+                    // Monitor the popup
+                    const checkInterval = setInterval(() => {
+                        try {
+                            if (popup.closed) {
+                                clearInterval(checkInterval);
+                                log('OAuth window closed', 'info');
+                            } else {
+                                // Try to get the URL (will fail due to cross-origin but we can detect)
+                                const currentUrl = popup.location.href;
+                                if (currentUrl.includes('localhost:3001')) {
+                                    log(`Redirect detected: ${currentUrl}`, 'success');
+                                    clearInterval(checkInterval);
+                                    popup.close();
+                                }
+                            }
+                        } catch (e) {
+                            // Expected due to cross-origin
+                        }
+                    }, 1000);
+                } else {
+                    log('Failed to get auth URL', 'error');
+                }
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        }
+
+        function openOAuthDirectly() {
+            const authUrl = 'https://dropbox.com/oauth2/authorize?response_type=code&client_id=pm84xrqz2ntb6sz&redirect_uri=http://localhost:3001/api/dropbox/auth&token_access_type=offline';
+            log(`Opening OAuth URL directly: ${authUrl}`, 'info');
+            window.open(authUrl, '_blank');
+        }
+
+        // Check for OAuth callback parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('code')) {
+            log(`OAuth callback received with code: ${urlParams.get('code')}`, 'success');
+        } else if (urlParams.has('error')) {
+            log(`OAuth error: ${urlParams.get('error')}`, 'error');
+            if (urlParams.has('error_description')) {
+                log(`Error description: ${urlParams.get('error_description')}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

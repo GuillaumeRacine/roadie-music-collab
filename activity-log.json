@@ -1,0 +1,1221 @@
+[
+  {
+    "action": "create_folder",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22",
+    "details": {
+      "folderCreated": "2025.09.22",
+      "dateSource": "filename-extraction",
+      "fileCount": 55
+    },
+    "id": "1758565882437-xkrr1z1h6",
+    "timestamp": "2025-09-22T18:31:22.437Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_08.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_08.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_08.m4a",
+    "details": {
+      "originalName": "20250922_20250828_08.m4a",
+      "newName": "20250922_20250828_08.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565883726-bxgcdrrga",
+    "timestamp": "2025-09-22T18:31:23.726Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_09.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_09.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_09.m4a",
+    "details": {
+      "originalName": "20250922_20250828_09.m4a",
+      "newName": "20250922_20250828_09.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565885030-fr4ijheqp",
+    "timestamp": "2025-09-22T18:31:25.030Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_10.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_10.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_10.m4a",
+    "details": {
+      "originalName": "20250922_20250828_10.m4a",
+      "newName": "20250922_20250828_10.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565886069-ou4foirux",
+    "timestamp": "2025-09-22T18:31:26.069Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_15.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_15.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_15.m4a",
+    "details": {
+      "originalName": "20250922_20250828_15.m4a",
+      "newName": "20250922_20250828_15.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565887395-4df5oj59m",
+    "timestamp": "2025-09-22T18:31:27.395Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_11.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_11.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_11.mp3",
+    "details": {
+      "originalName": "20250922_20250828_11.mp3",
+      "newName": "20250922_20250828_11.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565888404-kaaaj26gd",
+    "timestamp": "2025-09-22T18:31:28.404Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_14.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_14.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_14.mp3",
+    "details": {
+      "originalName": "20250922_20250828_14.mp3",
+      "newName": "20250922_20250828_14.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565889546-x6fw875sz",
+    "timestamp": "2025-09-22T18:31:29.546Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_09.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_09.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_09.mp3",
+    "details": {
+      "originalName": "20250922_20250828_09.mp3",
+      "newName": "20250922_20250828_09.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565890694-z7lezb7l1",
+    "timestamp": "2025-09-22T18:31:30.694Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_08.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_08.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_08.mp3",
+    "details": {
+      "originalName": "20250922_20250828_08.mp3",
+      "newName": "20250922_20250828_08.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565891764-ixaxsrqv3",
+    "timestamp": "2025-09-22T18:31:31.764Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_09 (1).mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_09 (1).mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_09 (1).mp3",
+    "details": {
+      "originalName": "20250922_20250828_09 (1).mp3",
+      "newName": "20250922_20250828_09 (1).mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565892805-6fsqotw6i",
+    "timestamp": "2025-09-22T18:31:32.805Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_15.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_15.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_15.mp3",
+    "details": {
+      "originalName": "20250922_20250828_15.mp3",
+      "newName": "20250922_20250828_15.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565893961-1hyqlwtym",
+    "timestamp": "2025-09-22T18:31:33.961Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_17.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_17.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_17.mp3",
+    "details": {
+      "originalName": "20250922_20250828_17.mp3",
+      "newName": "20250922_20250828_17.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565895107-yhsx55uz4",
+    "timestamp": "2025-09-22T18:31:35.107Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_18.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_18.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_18.mp3",
+    "details": {
+      "originalName": "20250922_20250828_18.mp3",
+      "newName": "20250922_20250828_18.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565896451-hjoxv60ng",
+    "timestamp": "2025-09-22T18:31:36.451Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_08 (1).mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_08 (1).mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_08 (1).mp3",
+    "details": {
+      "originalName": "20250922_20250828_08 (1).mp3",
+      "newName": "20250922_20250828_08 (1).mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565897575-5qqbplgog",
+    "timestamp": "2025-09-22T18:31:37.575Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_10.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_10.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_10.mp3",
+    "details": {
+      "originalName": "20250922_20250828_10.mp3",
+      "newName": "20250922_20250828_10.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565898944-hdwf4tip5",
+    "timestamp": "2025-09-22T18:31:38.944Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_13.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_13.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_13.mp3",
+    "details": {
+      "originalName": "20250922_20250828_13.mp3",
+      "newName": "20250922_20250828_13.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565899963-5j546keo4",
+    "timestamp": "2025-09-22T18:31:39.963Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_11.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_11.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_11.m4a",
+    "details": {
+      "originalName": "20250922_20250828_11.m4a",
+      "newName": "20250922_20250828_11.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565901108-oacr20odb",
+    "timestamp": "2025-09-22T18:31:41.108Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_12.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_12.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_12.m4a",
+    "details": {
+      "originalName": "20250922_20250828_12.m4a",
+      "newName": "20250922_20250828_12.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565902256-7x7kfulbh",
+    "timestamp": "2025-09-22T18:31:42.256Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_21.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_21.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_21.mp3",
+    "details": {
+      "originalName": "20250922_20250828_21.mp3",
+      "newName": "20250922_20250828_21.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565903370-6klmzprid",
+    "timestamp": "2025-09-22T18:31:43.370Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_20.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_20.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_20.mp3",
+    "details": {
+      "originalName": "20250922_20250828_20.mp3",
+      "newName": "20250922_20250828_20.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565904421-n85kyzrjy",
+    "timestamp": "2025-09-22T18:31:44.421Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_22.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_22.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_22.mp3",
+    "details": {
+      "originalName": "20250922_20250828_22.mp3",
+      "newName": "20250922_20250828_22.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565905605-502oy9foo",
+    "timestamp": "2025-09-22T18:31:45.605Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_16.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_16.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_16.mp3",
+    "details": {
+      "originalName": "20250922_20250828_16.mp3",
+      "newName": "20250922_20250828_16.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565906710-3cq7duyrb",
+    "timestamp": "2025-09-22T18:31:46.710Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_19.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_19.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_19.mp3",
+    "details": {
+      "originalName": "20250922_20250828_19.mp3",
+      "newName": "20250922_20250828_19.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565907752-gmgafdbbq",
+    "timestamp": "2025-09-22T18:31:47.752Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_13.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_13.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_13.m4a",
+    "details": {
+      "originalName": "20250922_20250828_13.m4a",
+      "newName": "20250922_20250828_13.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565908960-ukk89ls3k",
+    "timestamp": "2025-09-22T18:31:48.960Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_14.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_14.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_14.m4a",
+    "details": {
+      "originalName": "20250922_20250828_14.m4a",
+      "newName": "20250922_20250828_14.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565910109-4355mf0sm",
+    "timestamp": "2025-09-22T18:31:50.109Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_11 (1).mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_11 (1).mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_11 (1).mp3",
+    "details": {
+      "originalName": "20250922_20250828_11 (1).mp3",
+      "newName": "20250922_20250828_11 (1).mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565911114-uilgver3l",
+    "timestamp": "2025-09-22T18:31:51.114Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250902.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250902.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250902.mp3",
+    "details": {
+      "originalName": "20250922_20250902.mp3",
+      "newName": "20250922_20250902.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565912252-jjbkiyf56",
+    "timestamp": "2025-09-22T18:31:52.252Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_15 (1).mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_15 (1).mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_15 (1).mp3",
+    "details": {
+      "originalName": "20250922_20250828_15 (1).mp3",
+      "newName": "20250922_20250828_15 (1).mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565913271-onbdt995x",
+    "timestamp": "2025-09-22T18:31:53.271Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_12.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_12.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_12.mp3",
+    "details": {
+      "originalName": "20250922_20250828_12.mp3",
+      "newName": "20250922_20250828_12.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565914415-b26yj87k4",
+    "timestamp": "2025-09-22T18:31:54.415Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_16.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_16.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_16.m4a",
+    "details": {
+      "originalName": "20250922_20250828_16.m4a",
+      "newName": "20250922_20250828_16.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565915484-l1i85qfz6",
+    "timestamp": "2025-09-22T18:31:55.484Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_17.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_17.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_17.m4a",
+    "details": {
+      "originalName": "20250922_20250828_17.m4a",
+      "newName": "20250922_20250828_17.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565916501-711l9k19p",
+    "timestamp": "2025-09-22T18:31:56.501Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_18.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_18.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_18.m4a",
+    "details": {
+      "originalName": "20250922_20250828_18.m4a",
+      "newName": "20250922_20250828_18.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565917737-i40chmh9q",
+    "timestamp": "2025-09-22T18:31:57.737Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_19.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_19.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_19.m4a",
+    "details": {
+      "originalName": "20250922_20250828_19.m4a",
+      "newName": "20250922_20250828_19.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565918892-08kuh7pcc",
+    "timestamp": "2025-09-22T18:31:58.892Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_20.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_20.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_20.m4a",
+    "details": {
+      "originalName": "20250922_20250828_20.m4a",
+      "newName": "20250922_20250828_20.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565919912-aaib50pte",
+    "timestamp": "2025-09-22T18:31:59.912Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_21.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_21.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_21.m4a",
+    "details": {
+      "originalName": "20250922_20250828_21.m4a",
+      "newName": "20250922_20250828_21.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565921156-ulosol9uj",
+    "timestamp": "2025-09-22T18:32:01.156Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_22.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_22.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_22.m4a",
+    "details": {
+      "originalName": "20250922_20250828_22.m4a",
+      "newName": "20250922_20250828_22.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565922278-s50wfpzn4",
+    "timestamp": "2025-09-22T18:32:02.278Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250902.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250902.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250902.m4a",
+    "details": {
+      "originalName": "20250922_20250902.m4a",
+      "newName": "20250922_20250902.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565923958-auzvyv4gr",
+    "timestamp": "2025-09-22T18:32:03.958Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_16 (1).mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_20250828_16 (1).mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_20250828_16 (1).mp3",
+    "details": {
+      "originalName": "20250922_20250828_16 (1).mp3",
+      "newName": "20250922_20250828_16 (1).mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565925279-wg912w2x6",
+    "timestamp": "2025-09-22T18:32:05.279Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_379 Ch du Tour 383.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_379 Ch du Tour 383.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_379 Ch du Tour 383.m4a",
+    "details": {
+      "originalName": "20250922_379 Ch du Tour 383.m4a",
+      "newName": "20250922_379 Ch du Tour 383.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565926401-z5wk9tbxe",
+    "timestamp": "2025-09-22T18:32:06.401Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_379 Ch du Tour 383.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_379 Ch du Tour 383.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_379 Ch du Tour 383.mp3",
+    "details": {
+      "originalName": "20250922_379 Ch du Tour 383.mp3",
+      "newName": "20250922_379 Ch du Tour 383.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565927520-vrtwkfnhm",
+    "timestamp": "2025-09-22T18:32:07.520Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_379 Ch du Tour 384.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_379 Ch du Tour 384.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_379 Ch du Tour 384.mp3",
+    "details": {
+      "originalName": "20250922_379 Ch du Tour 384.mp3",
+      "newName": "20250922_379 Ch du Tour 384.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565928497-cjlbr9vqj",
+    "timestamp": "2025-09-22T18:32:08.497Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_379 Ch du Tour 385.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_379 Ch du Tour 385.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_379 Ch du Tour 385.m4a",
+    "details": {
+      "originalName": "20250922_379 Ch du Tour 385.m4a",
+      "newName": "20250922_379 Ch du Tour 385.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565929519-jex62mfv6",
+    "timestamp": "2025-09-22T18:32:09.519Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_379 Ch du Tour 385.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_379 Ch du Tour 385.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_379 Ch du Tour 385.mp3",
+    "details": {
+      "originalName": "20250922_379 Ch du Tour 385.mp3",
+      "newName": "20250922_379 Ch du Tour 385.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565930734-yy0sbit1j",
+    "timestamp": "2025-09-22T18:32:10.734Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_379 Ch du Tour 384.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_379 Ch du Tour 384.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_379 Ch du Tour 384.m4a",
+    "details": {
+      "originalName": "20250922_379 Ch du Tour 384.m4a",
+      "newName": "20250922_379 Ch du Tour 384.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565931929-1g13cj8bn",
+    "timestamp": "2025-09-22T18:32:11.929Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_379 Ch du Tour 386.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_379 Ch du Tour 386.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_379 Ch du Tour 386.m4a",
+    "details": {
+      "originalName": "20250922_379 Ch du Tour 386.m4a",
+      "newName": "20250922_379 Ch du Tour 386.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565933014-a1kfnlbja",
+    "timestamp": "2025-09-22T18:32:13.014Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_379 Ch du Tour 386.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_379 Ch du Tour 386.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_379 Ch du Tour 386.mp3",
+    "details": {
+      "originalName": "20250922_379 Ch du Tour 386.mp3",
+      "newName": "20250922_379 Ch du Tour 386.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565934135-kw6vvarbj",
+    "timestamp": "2025-09-22T18:32:14.135Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_Punk Rock.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_Punk Rock.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_Punk Rock.m4a",
+    "details": {
+      "originalName": "20250922_Punk Rock.m4a",
+      "newName": "20250922_Punk Rock.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565935223-qv2f9wb6v",
+    "timestamp": "2025-09-22T18:32:15.223Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_Punk Rock.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_Punk Rock.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_Punk Rock.mp3",
+    "details": {
+      "originalName": "20250922_Punk Rock.mp3",
+      "newName": "20250922_Punk Rock.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565936260-bhyoeb37e",
+    "timestamp": "2025-09-22T18:32:16.260Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_Dirty Deeds.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_Dirty Deeds.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_Dirty Deeds.mp3",
+    "details": {
+      "originalName": "20250922_Dirty Deeds.mp3",
+      "newName": "20250922_Dirty Deeds.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565937337-ig1lc6aok",
+    "timestamp": "2025-09-22T18:32:17.337Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_Take It Easy_140bpm_07.14_All.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_Take It Easy_140bpm_07.14_All.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_Take It Easy_140bpm_07.14_All.mp3",
+    "details": {
+      "originalName": "20250922_Take It Easy_140bpm_07.14_All.mp3",
+      "newName": "20250922_Take It Easy_140bpm_07.14_All.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565938535-oqt2m6xdw",
+    "timestamp": "2025-09-22T18:32:18.535Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_002_1.wav",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_002_1.wav",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_002_1.wav",
+    "details": {
+      "originalName": "20250922_002_1.wav",
+      "newName": "20250922_002_1.wav",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565939603-rcm3mhec1",
+    "timestamp": "2025-09-22T18:32:19.603Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_002_1.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_002_1.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_002_1.mp3",
+    "details": {
+      "originalName": "20250922_002_1.mp3",
+      "newName": "20250922_002_1.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565940662-e0vj0318v",
+    "timestamp": "2025-09-22T18:32:20.662Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_034_1.wav",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_034_1.wav",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_034_1.wav",
+    "details": {
+      "originalName": "20250922_034_1.wav",
+      "newName": "20250922_034_1.wav",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565941784-fqau50k8m",
+    "timestamp": "2025-09-22T18:32:21.784Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_034_1.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_034_1.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_034_1.mp3",
+    "details": {
+      "originalName": "20250922_034_1.mp3",
+      "newName": "20250922_034_1.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565942875-0i21lu5p0",
+    "timestamp": "2025-09-22T18:32:22.875Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_Toute Ma vie.m4a",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_Toute Ma vie.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_Toute Ma vie.m4a",
+    "details": {
+      "originalName": "20250922_Toute Ma vie.m4a",
+      "newName": "20250922_Toute Ma vie.m4a",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565944050-194h1dakz",
+    "timestamp": "2025-09-22T18:32:24.050Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_Toute Ma vie.mp3",
+    "oldPath": "/Music/Fiasco Total/Live Recordings/2025/20250922_Toute Ma vie.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250922_Toute Ma vie.mp3",
+    "details": {
+      "originalName": "20250922_Toute Ma vie.mp3",
+      "newName": "20250922_Toute Ma vie.mp3",
+      "category": "live-recording-organization",
+      "dateSource": "filename-extraction",
+      "detectedDate": "2025.09.22",
+      "folderCreated": "2025.09.22"
+    },
+    "id": "1758565945247-moh701zjl",
+    "timestamp": "2025-09-22T18:32:25.247Z"
+  },
+  {
+    "action": "audio_cluster_analysis",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22",
+    "details": {
+      "audioFilesAnalyzed": 55,
+      "clustersFound": 0,
+      "similarityThreshold": 0.6,
+      "errors": 0
+    },
+    "id": "1758572935745-ji2cx4eaq",
+    "timestamp": "2025-09-22T20:28:55.745Z"
+  },
+  {
+    "action": "audio_cluster_analysis",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22",
+    "details": {
+      "audioFilesAnalyzed": 55,
+      "clustersFound": 0,
+      "similarityThreshold": 0.6,
+      "errors": 0
+    },
+    "id": "1758573106019-h2wetw745",
+    "timestamp": "2025-09-22T20:31:46.019Z"
+  },
+  {
+    "action": "audio_cluster_analysis",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22",
+    "details": {
+      "audioFilesAnalyzed": 55,
+      "clustersFound": 6,
+      "similarityThreshold": 0.4,
+      "errors": 0
+    },
+    "id": "1758575496745-dn9pbflii",
+    "timestamp": "2025-09-22T21:11:36.745Z"
+  },
+  {
+    "action": "organize_audio_cluster",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/cluster_cluster_1758575496744_dqxet0f9t_1758575524937",
+    "details": {
+      "clusterId": "cluster_1758575496744_dqxet0f9t",
+      "clusterName": "cluster_cluster_1758575496744_dqxet0f9t_1758575524937",
+      "filesOrganized": 8,
+      "totalFiles": 8
+    },
+    "id": "1758575534417-xvd7sft14",
+    "timestamp": "2025-09-22T21:12:14.417Z"
+  },
+  {
+    "action": "audio_cluster_analysis",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22",
+    "details": {
+      "audioFilesAnalyzed": 47,
+      "clustersFound": 4,
+      "thresholdSelection": "automatic",
+      "errors": 0
+    },
+    "id": "1758633811754-62fctthfn",
+    "timestamp": "2025-09-23T13:23:31.754Z"
+  },
+  {
+    "action": "audio_cluster_analysis",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22",
+    "details": {
+      "audioFilesAnalyzed": 47,
+      "clustersFound": 4,
+      "thresholdSelection": "automatic",
+      "errors": 0
+    },
+    "id": "1758634009091-1vj0zmwpb",
+    "timestamp": "2025-09-23T13:26:49.091Z"
+  },
+  {
+    "action": "organize_audio_cluster",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250923_20250902",
+    "details": {
+      "clusterId": "cluster_1758634009090_uk1c0q68a",
+      "clusterFolderName": "20250923_20250902",
+      "filesOrganized": 2,
+      "totalFiles": 2,
+      "renamedFiles": 0,
+      "namingConvention": "date_songname"
+    },
+    "id": "1758634018141-57j3ein6i",
+    "timestamp": "2025-09-23T13:26:58.141Z"
+  },
+  {
+    "action": "organize_audio_cluster",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250923_recordingsession34takes",
+    "details": {
+      "clusterId": "cluster_1758634009090_lu418m4sz",
+      "clusterFolderName": "20250923_recordingsession34takes",
+      "filesOrganized": 34,
+      "totalFiles": 34,
+      "renamedFiles": 0,
+      "namingConvention": "date_songname"
+    },
+    "id": "1758634061257-z2sc3nvx5",
+    "timestamp": "2025-09-23T13:27:41.257Z"
+  },
+  {
+    "action": "audio_cluster_analysis",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22",
+    "details": {
+      "audioFilesAnalyzed": 11,
+      "clustersFound": 2,
+      "thresholdSelection": "automatic",
+      "errors": 0
+    },
+    "id": "1758634256993-uj3vpx11k",
+    "timestamp": "2025-09-23T13:30:56.993Z"
+  },
+  {
+    "action": "organize_audio_cluster",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250923_recordingsession8takes",
+    "details": {
+      "clusterId": "cluster_1758634256993_gh49x9ksb",
+      "clusterFolderName": "20250923_recordingsession8takes",
+      "filesOrganized": 8,
+      "totalFiles": 8,
+      "renamedFiles": 0,
+      "namingConvention": "date_songname"
+    },
+    "id": "1758634270424-c1kmii8pd",
+    "timestamp": "2025-09-23T13:31:10.424Z"
+  },
+  {
+    "action": "organize_audio_cluster",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/2025.09.22/20250923_recordingsession2takes",
+    "details": {
+      "clusterId": "cluster_1758634256993_6w862uvw2",
+      "clusterFolderName": "20250923_recordingsession2takes",
+      "filesOrganized": 2,
+      "totalFiles": 2,
+      "renamedFiles": 0,
+      "namingConvention": "date_songname"
+    },
+    "id": "1758634277932-350hwzurs",
+    "timestamp": "2025-09-23T13:31:17.932Z"
+  },
+  {
+    "action": "audio_cluster_analysis",
+    "filePath": "/Music/Fiasco Total/New Uploads",
+    "details": {
+      "audioFilesAnalyzed": 11,
+      "clustersFound": 1,
+      "thresholdSelection": "automatic",
+      "errors": 0
+    },
+    "id": "1758762725706-38tqs6459",
+    "timestamp": "2025-09-25T01:12:05.706Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 411.m4a",
+    "oldPath": "/Music/Fiasco Total/New Uploads/379 Ch du Tour 411.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 411.m4a",
+    "details": {
+      "originalName": "379 Ch du Tour 411.m4a",
+      "newName": "20250925_379 Ch du Tour 411.m4a",
+      "category": "live-recording",
+      "dateSource": "dropbox-upload",
+      "detectedDate": "2025-09-25",
+      "folderCreated": ""
+    },
+    "id": "1758814317187-w9q9hw88i",
+    "timestamp": "2025-09-25T15:31:57.187Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 410.m4a",
+    "oldPath": "/Music/Fiasco Total/New Uploads/379 Ch du Tour 410.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 410.m4a",
+    "details": {
+      "originalName": "379 Ch du Tour 410.m4a",
+      "newName": "20250925_379 Ch du Tour 410.m4a",
+      "category": "live-recording",
+      "dateSource": "dropbox-upload",
+      "detectedDate": "2025-09-25",
+      "folderCreated": ""
+    },
+    "id": "1758814318773-u2sbb1pjg",
+    "timestamp": "2025-09-25T15:31:58.773Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 410.mp3",
+    "oldPath": "/Music/Fiasco Total/New Uploads/379 Ch du Tour 410.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 410.mp3",
+    "details": {
+      "originalName": "379 Ch du Tour 410.mp3",
+      "newName": "20250925_379 Ch du Tour 410.mp3",
+      "category": "live-recording",
+      "dateSource": "dropbox-upload",
+      "detectedDate": "2025-09-25",
+      "folderCreated": ""
+    },
+    "id": "1758814320358-04typ8zvk",
+    "timestamp": "2025-09-25T15:32:00.358Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 408.m4a",
+    "oldPath": "/Music/Fiasco Total/New Uploads/379 Ch du Tour 408.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 408.m4a",
+    "details": {
+      "originalName": "379 Ch du Tour 408.m4a",
+      "newName": "20250925_379 Ch du Tour 408.m4a",
+      "category": "live-recording",
+      "dateSource": "dropbox-upload",
+      "detectedDate": "2025-09-25",
+      "folderCreated": ""
+    },
+    "id": "1758814321761-uqd47sgil",
+    "timestamp": "2025-09-25T15:32:01.761Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 408.mp3",
+    "oldPath": "/Music/Fiasco Total/New Uploads/379 Ch du Tour 408.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 408.mp3",
+    "details": {
+      "originalName": "379 Ch du Tour 408.mp3",
+      "newName": "20250925_379 Ch du Tour 408.mp3",
+      "category": "live-recording",
+      "dateSource": "dropbox-upload",
+      "detectedDate": "2025-09-25",
+      "folderCreated": ""
+    },
+    "id": "1758814323296-e6l2aa8ji",
+    "timestamp": "2025-09-25T15:32:03.296Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 407.m4a",
+    "oldPath": "/Music/Fiasco Total/New Uploads/379 Ch du Tour 407.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 407.m4a",
+    "details": {
+      "originalName": "379 Ch du Tour 407.m4a",
+      "newName": "20250925_379 Ch du Tour 407.m4a",
+      "category": "live-recording",
+      "dateSource": "dropbox-upload",
+      "detectedDate": "2025-09-25",
+      "folderCreated": ""
+    },
+    "id": "1758814324950-8fuffvlkv",
+    "timestamp": "2025-09-25T15:32:04.950Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 407.mp3",
+    "oldPath": "/Music/Fiasco Total/New Uploads/379 Ch du Tour 407.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 407.mp3",
+    "details": {
+      "originalName": "379 Ch du Tour 407.mp3",
+      "newName": "20250925_379 Ch du Tour 407.mp3",
+      "category": "live-recording",
+      "dateSource": "dropbox-upload",
+      "detectedDate": "2025-09-25",
+      "folderCreated": ""
+    },
+    "id": "1758814326632-sho8yxqwb",
+    "timestamp": "2025-09-25T15:32:06.632Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 406.m4a",
+    "oldPath": "/Music/Fiasco Total/New Uploads/379 Ch du Tour 406.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 406.m4a",
+    "details": {
+      "originalName": "379 Ch du Tour 406.m4a",
+      "newName": "20250925_379 Ch du Tour 406.m4a",
+      "category": "live-recording",
+      "dateSource": "dropbox-upload",
+      "detectedDate": "2025-09-25",
+      "folderCreated": ""
+    },
+    "id": "1758814328197-a2v4jq5js",
+    "timestamp": "2025-09-25T15:32:08.197Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 406.mp3",
+    "oldPath": "/Music/Fiasco Total/New Uploads/379 Ch du Tour 406.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 406.mp3",
+    "details": {
+      "originalName": "379 Ch du Tour 406.mp3",
+      "newName": "20250925_379 Ch du Tour 406.mp3",
+      "category": "live-recording",
+      "dateSource": "dropbox-upload",
+      "detectedDate": "2025-09-25",
+      "folderCreated": ""
+    },
+    "id": "1758814329746-6jev1cn4w",
+    "timestamp": "2025-09-25T15:32:09.746Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 405.m4a",
+    "oldPath": "/Music/Fiasco Total/New Uploads/379 Ch du Tour 405.m4a",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 405.m4a",
+    "details": {
+      "originalName": "379 Ch du Tour 405.m4a",
+      "newName": "20250925_379 Ch du Tour 405.m4a",
+      "category": "live-recording",
+      "dateSource": "dropbox-upload",
+      "detectedDate": "2025-09-25",
+      "folderCreated": ""
+    },
+    "id": "1758814332221-qilh4llxv",
+    "timestamp": "2025-09-25T15:32:12.221Z"
+  },
+  {
+    "action": "organize",
+    "filePath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 405.mp3",
+    "oldPath": "/Music/Fiasco Total/New Uploads/379 Ch du Tour 405.mp3",
+    "newPath": "/Music/Fiasco Total/Live Recordings/2025/20250925_379 Ch du Tour 405.mp3",
+    "details": {
+      "originalName": "379 Ch du Tour 405.mp3",
+      "newName": "20250925_379 Ch du Tour 405.mp3",
+      "category": "live-recording",
+      "dateSource": "dropbox-upload",
+      "detectedDate": "2025-09-25",
+      "folderCreated": ""
+    },
+    "id": "1758814333764-q22wupvbn",
+    "timestamp": "2025-09-25T15:32:13.764Z"
+  }
+]
